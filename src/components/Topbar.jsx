@@ -21,7 +21,7 @@ export default function Topbar({ sidebarCollapsed, onToggleSidebar }) {
       className={cn(
         'fixed top-0 right-0 z-30 h-[72px] flex items-center px-4 md:px-6 gap-4',
         'bg-card/80 border-b border-border backdrop-blur-xl transition-all duration-300',
-        'left-0 md:left-auto',
+        'left-0',
         sidebarCollapsed ? 'md:left-[72px]' : 'md:left-[260px]'
       )}
     >
