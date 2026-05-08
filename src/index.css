@@ -13,16 +13,16 @@
     --card-foreground: 15 23 42;
     --border: 226 232 240;
     --input: 226 232 240;
-    --primary: 79 70 229;
+    --primary: 59 130 246;
     --primary-foreground: 255 255 255;
     --secondary: 241 245 249;
-    --secondary-foreground: 79 70 229;
+    --secondary-foreground: 59 130 246;
     --muted: 241 245 249;
     --muted-foreground: 100 116 139;
     --accent: 16 185 129;
     --accent-foreground: 255 255 255;
-    --sidebar-bg: 255 255 255;
-    --sidebar-border: 241 245 249;
+    --sidebar-bg: 2 6 23;
+    --sidebar-border: 15 23 42;
   }
 
   .dark {
@@ -163,6 +163,26 @@
 
   .animate-in {
     animation: fadeIn 0.4s ease-out forwards;
+  }
+
+  .bg-sidebar {
+    background-color: rgb(var(--sidebar-bg));
+    color: white;
+  }
+
+  .sidebar-text {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .sidebar-item-active {
+    background-color: #3b82f6;
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  .sidebar-item-hover:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: white;
   }
 
   .bg-grid {
