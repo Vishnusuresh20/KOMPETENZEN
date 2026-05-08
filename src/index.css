@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 1rem;
+    --background: 248 250 252;
+    --foreground: 15 23 42;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --primary: 79 70 229;
+    --primary-foreground: 255 255 255;
+    --secondary: 241 245 249;
+    --secondary-foreground: 79 70 229;
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    --accent: 16 185 129;
+    --accent-foreground: 255 255 255;
+    --sidebar-bg: 255 255 255;
+    --sidebar-border: 241 245 249;
+  }
+
+  .dark {
+    --background: 2 6 23;
+    --foreground: 248 250 252;
+    --card: 15 23 42;
+    --card-foreground: 248 250 252;
+    --border: 30 41 59;
+    --input: 30 41 59;
+    --primary: 99 102 241;
+    --primary-foreground: 255 255 255;
+    --secondary: 30 41 59;
+    --secondary-foreground: 148 163 184;
+    --muted: 15 23 42;
+    --muted-foreground: 148 163 184;
+    --accent: 16 185 129;
+    --accent-foreground: 255 255 255;
+    --sidebar-bg: 2 6 23;
+    --sidebar-border: 30 41 59;
+  }
+
+  * {
+    border-color: rgb(var(--border));
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-indigo-500/30 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-indigo-500/50;
+  }
+}
+
+@layer utilities {
+  .glass {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-card {
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+  }
+
+  .glass-dark {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(14, 14, 32, 0.8);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  .glass-indigo {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background: rgba(99, 102, 241, 0.05);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  .glass-emerald {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #6366f1, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-indigo {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+  }
+
+  .gradient-emerald {
+    background: linear-gradient(135deg, #059669, #10b981);
+  }
+
+  .gradient-violet {
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  }
+
+  .gradient-amber {
+    background: linear-gradient(135deg, #d97706, #f59e0b);
+  }
+
+  .gradient-rose {
+    background: linear-gradient(135deg, #e11d48, #f43f5e);
+  }
+
+  .sidebar-item-active {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(16, 185, 129, 0.1));
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+
+  .hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
+  }
+
+  .glow-indigo {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+
+  .glow-emerald {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .animate-in {
+    animation: fadeIn 0.4s ease-out forwards;
+  }
+
+  .bg-grid {
+    background-image: 
+      linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
