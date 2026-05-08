@@ -29,8 +29,8 @@ export default function StudentLayout() {
         <Topbar 
           onToggleSidebar={() => setMobileOpen(!mobileOpen)} 
         />
-        <main className="flex-1 p-4 md:p-8 pt-[88px] md:pt-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
+        <main className="flex-1 pt-[72px] overflow-y-auto min-h-screen">
+          <div className="p-4 md:p-8 max-w-7xl mx-auto">
             <Outlet />
           </div>
         </main>
