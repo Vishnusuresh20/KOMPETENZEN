@@ -71,24 +71,24 @@ export default function Sidebar({ collapsed, setCollapsed }) {
               to={item.path}
               end={item.end}
               className={cn(
-                'group flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200',
-                isActive ? 'sidebar-item-active' : 'sidebar-text sidebar-item-hover hover:text-white'
+                'group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200',
+                isActive ? 'bg-indigo-500/10 text-indigo-400' : 'text-muted-foreground hover:bg-muted'
               )}
             >
-              <item.icon className={cn('w-5 h-5', isActive ? 'text-white' : 'opacity-60 group-hover:opacity-100')} />
-              {!collapsed && <span className="font-semibold text-sm tracking-wide">{item.label}</span>}
+              <item.icon className={cn('w-5 h-5', isActive ? 'text-indigo-400' : 'group-hover:text-indigo-400')} />
+              {!collapsed && <span className="font-medium text-sm">{item.label}</span>}
             </NavLink>
           );
         })}
       </nav>
 
-      <div className="p-3 border-t border-white/5">
+      <div className="p-3 border-t border-sidebar">
         <button
           onClick={() => setCollapsed((c) => !c)}
-          className="w-full flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-sm font-medium sidebar-text sidebar-item-hover hover:text-white transition-all"
+          className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-medium text-muted-foreground hover:bg-indigo-500/10 hover:text-indigo-400 transition-all border border-transparent hover:border-indigo-500/20"
         >
           {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          {!collapsed && <span>Collapse View</span>}
+          {!collapsed && <span>Collapse</span>}
         </button>
       </div>
     </motion.aside>

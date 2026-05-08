@@ -35,18 +35,18 @@ export default function StudentSidebar() {
 
   return (
     <aside className={cn(
-      "h-screen bg-sidebar border-r border-white/5 flex flex-col transition-all duration-300 sticky top-0",
+      "h-screen bg-[rgb(var(--sidebar))] border-r border-[rgb(var(--border))] flex flex-col transition-all duration-300 sticky top-0",
       isCollapsed ? "w-20" : "w-64"
     )}>
       {/* Logo Section */}
       <div className="p-6 flex items-center gap-3">
-        <div className="w-8 h-8 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
+        <div className="w-8 h-8 bg-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
           <GraduationCap className="w-5 h-5 text-white" />
         </div>
         {!isCollapsed && (
           <div className="flex flex-col">
-            <span className="font-bold text-white tracking-tight leading-none text-sm">Kompetenzen</span>
-            <span className="text-[10px] sidebar-text font-medium uppercase tracking-wider mt-1">Student Portal</span>
+            <span className="font-bold text-[rgb(var(--foreground))] tracking-tight leading-none text-sm">Kompetenzen</span>
+            <span className="text-[10px] text-[rgb(var(--muted-foreground))] font-medium uppercase tracking-wider mt-1">Student Portal</span>
           </div>
         )}
       </div>
@@ -59,29 +59,29 @@ export default function StudentSidebar() {
             to={item.path}
             end={item.end}
             className={({ isActive }) => cn(
-              "flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all duration-200",
+              "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
               isActive 
-                ? "sidebar-item-active" 
-                : "sidebar-text hover:text-white hover:bg-white/5"
+                ? "bg-emerald-500/10 text-emerald-500" 
+                : "text-[rgb(var(--muted-foreground))] hover:text-emerald-400 hover:bg-emerald-500/5"
             )}
           >
-            <item.icon className={cn("w-5 h-5 flex-shrink-0", isActive ? "text-white" : "opacity-60")} />
+            <item.icon className="w-5 h-5 flex-shrink-0" />
             {!isCollapsed && <span>{item.label}</span>}
           </NavLink>
         ))}
       </nav>
 
       {/* User & Logout */}
-      <div className="p-4 border-t border-white/5 space-y-2">
+      <div className="p-4 border-t border-[rgb(var(--border))] space-y-2">
         {!isCollapsed && (
-          <div className="px-2 py-3 rounded-2xl bg-white/5 border border-white/10 mb-4">
+          <div className="px-2 py-3 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 mb-4">
              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
-                   AM
+                <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white text-xs font-bold">
+                  AM
                 </div>
                 <div>
-                   <p className="text-xs font-bold text-white">Arjun Menon</p>
-                   <p className="text-[10px] sidebar-text">Full Stack Dev</p>
+                   <p className="text-xs font-bold text-foreground">Arjun Menon</p>
+                   <p className="text-[10px] text-muted-foreground">Full Stack Dev</p>
                 </div>
              </div>
           </div>
@@ -90,7 +90,7 @@ export default function StudentSidebar() {
         <button
           onClick={handleLogout}
           className={cn(
-            "w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-rose-400 hover:bg-rose-500/10 transition-all duration-200",
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-rose-500 hover:bg-rose-500/10 transition-all duration-200",
             isCollapsed && "justify-center"
           )}
         >
@@ -100,7 +100,7 @@ export default function StudentSidebar() {
 
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium sidebar-text sidebar-item-hover hover:text-white transition-all duration-200 mt-2"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-[rgb(var(--muted-foreground))] hover:bg-[rgb(var(--muted))] transition-all duration-200 mt-2"
         >
           {isCollapsed ? <ChevronRight className="w-5 h-5 mx-auto" /> : (
             <>
