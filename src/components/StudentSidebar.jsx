@@ -1,20 +1,15 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
-  Users, 
   CreditCard, 
   GraduationCap, 
-  Settings, 
   LogOut,
   ChevronLeft,
   ChevronRight,
   BookOpen,
-  Calendar,
-  Award
+  Calendar
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { Button } from './ui/button';
-import { useState } from 'react';
 
 const navItems = [
   { label: 'My Dashboard', icon: LayoutDashboard, path: '/student/dashboard', end: true },

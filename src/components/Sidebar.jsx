@@ -1,17 +1,13 @@
-import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   Users,
-  Wallet,
-  GraduationCap,
   BarChart3,
   Settings,
   ChevronLeft,
   ChevronRight,
   Building2,
-  Sparkles,
   CreditCard
 } from 'lucide-react';
 import { cn } from '../lib/utils';
