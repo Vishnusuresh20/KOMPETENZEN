@@ -21,10 +21,14 @@ export default function Layout() {
       />
 
       <div className={cn(
-        "transition-transform duration-300 md:translate-x-0 z-50 fixed md:relative",
+        "fixed inset-y-0 left-0 z-50 transition-transform duration-300 md:translate-x-0",
         mobileOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Sidebar 
+          collapsed={collapsed} 
+          setCollapsed={setCollapsed} 
+          onNavigate={() => setMobileOpen(false)}
+        />
       </div>
 
       <Topbar 

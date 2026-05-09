@@ -24,7 +24,7 @@ const navItems = [
   { label: 'Settings', icon: Settings, path: '/admin/settings' },
 ];
 
-export default function Sidebar({ collapsed, setCollapsed }) {
+export default function Sidebar({ collapsed, setCollapsed, onNavigate }) {
   const location = useLocation();
 
   return (
@@ -32,7 +32,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
       animate={{ width: collapsed ? 72 : 260 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
       className={cn(
-        'fixed left-0 top-0 h-screen z-40 flex flex-col',
+        'h-screen flex flex-col',
         'bg-sidebar border-r border-sidebar shadow-xl overflow-hidden'
       )}
     >
@@ -70,6 +70,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
               key={item.path}
               to={item.path}
               end={item.end}
+              onClick={onNavigate}
               className={cn(
                 'group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200',
                 isActive ? 'bg-indigo-500/10 text-indigo-400' : 'text-muted-foreground hover:bg-muted'
