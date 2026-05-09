@@ -6,6 +6,7 @@ import { cn } from '../lib/utils';
 
 export default function StudentLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-background bg-grid">
@@ -19,14 +20,19 @@ export default function StudentLayout() {
       />
 
       <div className={cn(
-        "transition-transform duration-300 md:translate-x-0 z-50 fixed md:relative",
+        "fixed inset-y-0 left-0 z-50 md:relative transition-transform duration-300 md:translate-x-0",
         mobileOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <StudentSidebar />
+        <StudentSidebar 
+          collapsed={collapsed} 
+          setCollapsed={setCollapsed} 
+          onNavigate={() => setMobileOpen(false)} 
+        />
       </div>
 
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar 
+          sidebarCollapsed={collapsed}
           onToggleSidebar={() => setMobileOpen(!mobileOpen)} 
         />
         <main className="flex-1 pt-[72px] overflow-y-auto min-h-screen">
