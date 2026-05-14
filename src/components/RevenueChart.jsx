@@ -16,17 +16,19 @@ import { cn } from '../lib/utils';
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-xl p-3 shadow-2xl">
-        <p className="text-xs font-semibold text-[rgb(var(--foreground))] mb-2">{label}</p>
-        {payload.map((entry) => (
-          <div key={entry.name} className="flex items-center gap-2 text-xs">
-            <span className="w-2 h-2 rounded-full" style={{ background: entry.color }} />
-            <span className="text-[rgb(var(--muted-foreground))] capitalize">{entry.name}:</span>
-            <span className="font-semibold text-[rgb(var(--foreground))]">
-              ₹{(entry.value / 1000).toFixed(0)}k
-            </span>
-          </div>
-        ))}
+      <div className="bg-slate-950/80 border border-white/10 p-4 rounded-2xl shadow-2xl backdrop-blur-xl ring-1 ring-white/5">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 border-b border-white/10 pb-2">{label}</p>
+        <div className="space-y-1.5">
+          {payload.map((entry, index) => (
+            <div key={index} className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: entry.color }} />
+                <span className="text-xs font-medium text-slate-300 capitalize">{entry.name}:</span>
+              </div>
+              <span className="text-xs font-bold text-white">₹{entry.value.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -35,8 +37,14 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 const tabs = ['Revenue', 'Fees', 'Expenses'];
 
-export default function RevenueChart() {
+export default function RevenueChart({ data }) {
   const [activeTab, setActiveTab] = useState('Revenue');
+  const chartData = data || revenueData;
+
+  // Get totals from current data
+  const currentRevenue = chartData.reduce((acc, curr) => acc + (curr.revenue || 0), 0);
+  const currentFees = chartData.reduce((acc, curr) => acc + (curr.fees || 0), 0);
+  const currentExpenses = chartData.reduce((acc, curr) => acc + (curr.expenses || 0), 0);
 
   return (
     <motion.div
@@ -50,7 +58,7 @@ export default function RevenueChart() {
         <div>
           <h3 className="text-base font-bold text-[rgb(var(--foreground))]">Revenue Overview</h3>
           <p className="text-xs text-[rgb(var(--muted-foreground))] mt-0.5">
-            FY 2024 — Kompetenzen Technologies
+            FY 2026 — Kompetenzen Technologies
           </p>
         </div>
 
@@ -78,26 +86,26 @@ export default function RevenueChart() {
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
           <span className="w-2 h-2 rounded-full bg-indigo-400" />
           <span className="text-xs text-[rgb(var(--muted-foreground))]">Revenue</span>
-          <span className="text-xs font-bold text-indigo-400">₹84.25L</span>
+          <span className="text-xs font-bold text-indigo-400">₹{(currentRevenue / 1000).toFixed(1)}k</span>
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
           <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span className="text-xs text-[rgb(var(--muted-foreground))]">Fees Collected</span>
-          <span className="text-xs font-bold text-emerald-400">₹73.0L</span>
+          <span className="text-xs text-[rgb(var(--muted-foreground))]">Fees Pending</span>
+          <span className="text-xs font-bold text-emerald-400">₹{(currentFees / 1000).toFixed(1)}k</span>
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-violet-500/10 border border-violet-500/20">
           <span className="w-2 h-2 rounded-full bg-violet-400" />
           <span className="text-xs text-[rgb(var(--muted-foreground))]">Expenses</span>
-          <span className="text-xs font-bold text-violet-400">₹22.5L</span>
+          <span className="text-xs font-bold text-violet-400">₹{(currentExpenses / 1000).toFixed(1)}k</span>
         </div>
       </div>
 
       {/* Chart */}
       <ResponsiveContainer width="100%" height={240}>
-        <AreaChart data={revenueData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
+        <AreaChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
           <defs>
             <linearGradient id="gradRevenue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#6366f1" stopOpacity={0.25} />
+              <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
               <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
             </linearGradient>
             <linearGradient id="gradFees" x1="0" y1="0" x2="0" y2="1">
@@ -105,33 +113,33 @@ export default function RevenueChart() {
               <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
             </linearGradient>
             <linearGradient id="gradExpenses" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.2} />
-              <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+              <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.2} />
+              <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(99,102,241,0.08)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
           <XAxis
-            dataKey="month"
-            tick={{ fontSize: 11, fill: 'rgb(130,138,180)' }}
+            dataKey="name"
+            tick={{ fontSize: 11, fill: 'rgba(255,255,255,0.3)' }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 11, fill: 'rgb(130,138,180)' }}
+            tick={{ fontSize: 11, fill: 'rgba(255,255,255,0.3)' }}
             axisLine={false}
             tickLine={false}
-            tickFormatter={(v) => `₹${v / 1000}k`}
-            width={48}
+            tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`}
+            width={40}
           />
           <Tooltip content={<CustomTooltip />} />
           <Area
             type="monotone"
             dataKey="revenue"
             stroke="#6366f1"
-            strokeWidth={2.5}
+            strokeWidth={4}
             fill="url(#gradRevenue)"
+            filter="drop-shadow(0px 0px 8px rgba(99, 102, 241, 0.4))"
             dot={false}
-            activeDot={{ r: 5, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }}
           />
           <Area
             type="monotone"
@@ -139,20 +147,20 @@ export default function RevenueChart() {
             stroke="#10b981"
             strokeWidth={2}
             fill="url(#gradFees)"
+            strokeDasharray="5 5"
             dot={false}
-            activeDot={{ r: 4, fill: '#10b981', strokeWidth: 2, stroke: '#fff' }}
           />
           <Area
             type="monotone"
             dataKey="expenses"
-            stroke="#8b5cf6"
+            stroke="#f43f5e"
             strokeWidth={2}
             fill="url(#gradExpenses)"
             dot={false}
-            activeDot={{ r: 4, fill: '#8b5cf6', strokeWidth: 2, stroke: '#fff' }}
           />
         </AreaChart>
       </ResponsiveContainer>
     </motion.div>
   );
 }
+

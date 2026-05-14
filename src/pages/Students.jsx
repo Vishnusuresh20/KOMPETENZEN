@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, 
@@ -25,23 +25,38 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card, CardContent } from '../components/ui/card';
 import { cn } from '../lib/utils';
-import { students as initialStudents, branches } from '../data/mockData';
+import { students as initialStudents, branches, locations } from '../data/mockData';
 import { Link } from 'react-router-dom';
+import api from '../lib/axios';
 
 // --- Student Form Modal ---
 const StudentModal = ({ isOpen, onClose, student, onSave }) => {
+  const [courses, setCourses] = useState([]);
   const [formData, setFormData] = useState(student || {
     name: '',
     email: '',
     phone: '',
-    course: '',
+    courseId: '',
     branch: branches[0],
+    location: locations[0],
     username: '',
     password: '',
     confirmPassword: '',
     feeAmount: '',
     status: 'Active'
   });
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await api.get('/courses');
+        setCourses(response.data);
+      } catch (err) {
+        console.error("Failed to fetch courses", err);
+      }
+    };
+    if (isOpen) fetchCourses();
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -100,14 +115,15 @@ const StudentModal = ({ isOpen, onClose, student, onSave }) => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Course</label>
-              <input 
-                type="text" 
-                value={formData.course}
-                onChange={(e) => setFormData({...formData, course: e.target.value})}
-                placeholder="e.g. Full Stack Dev"
-                className="w-full px-4 py-3 rounded-xl bg-muted/50 border border-border focus:ring-2 focus:ring-indigo-500/30 outline-none transition-all"
-              />
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Assigned Course</label>
+              <select 
+                value={formData.courseId}
+                onChange={(e) => setFormData({...formData, courseId: e.target.value})}
+                className="w-full px-4 py-3 rounded-xl bg-muted/50 border border-border focus:ring-2 focus:ring-indigo-500/30 outline-none transition-all appearance-none"
+              >
+                <option value="">Select a Course</option>
+                {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+              </select>
             </div>
             <div className="space-y-2">
               <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Institution Branch</label>
@@ -117,6 +133,16 @@ const StudentModal = ({ isOpen, onClose, student, onSave }) => {
                 className="w-full px-4 py-3 rounded-xl bg-muted/50 border border-border focus:ring-2 focus:ring-indigo-500/30 outline-none transition-all appearance-none"
               >
                 {branches.map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Location</label>
+              <select 
+                value={formData.location}
+                onChange={(e) => setFormData({...formData, location: e.target.value})}
+                className="w-full px-4 py-3 rounded-xl bg-muted/50 border border-border focus:ring-2 focus:ring-indigo-500/30 outline-none transition-all appearance-none"
+              >
+                {locations.map(l => <option key={l} value={l}>{l}</option>)}
               </select>
             </div>
             <div className="space-y-2">
@@ -183,23 +209,60 @@ const StudentModal = ({ isOpen, onClose, student, onSave }) => {
 
 // --- Main Page ---
 export default function Students() {
-  const [students, setStudents] = useState(initialStudents);
+  const [students, setStudents] = useState([]);
   const [search, setSearch] = useState('');
   const [branchFilter, setBranchFilter] = useState('All');
+  const [locationFilter, setLocationFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const fetchStudents = async () => {
+    setIsLoading(true);
+    try {
+      const response = await api.get('/students');
+      const data = Array.isArray(response.data) ? response.data : [];
+      const mapped = data.map(dto => ({
+        id: dto?.id,
+        name: `${dto?.firstName || ''} ${dto?.lastName || ''}`.trim() || 'Unnamed Student',
+        email: dto?.email || 'N/A',
+        phone: dto?.phone || 'N/A',
+        course: dto?.course || 'Unassigned',
+        courseId: dto?.courseId || '',
+        branch: dto?.branch || branches[0],
+        location: (dto?.location && dto.location !== 'N/A') ? dto.location : locations[0],
+        feeAmount: dto?.feeAmount || 0,
+        status: dto?.active !== false ? 'Active' : 'Inactive',
+        joinDate: dto?.enrollmentDate || new Date().toISOString().split('T')[0]
+      }));
+      setStudents(mapped);
+    } catch (err) {
+      console.error("Backend fetch failed", err);
+      setStudents([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const filteredStudents = useMemo(() => {
     return students.filter(s => {
-      const matchesSearch = s.name.toLowerCase().includes(search.toLowerCase()) || 
-                           s.email.toLowerCase().includes(search.toLowerCase()) ||
-                           s.id.toLowerCase().includes(search.toLowerCase());
-      const matchesBranch = branchFilter === 'All' || s.branch === branchFilter;
-      return matchesSearch && matchesBranch;
+      if (!s) return false;
+      const searchStr = (search || '').toLowerCase();
+      const matchesSearch = (s.name || '').toLowerCase().includes(searchStr) || 
+                           (s.email || '').toLowerCase().includes(searchStr) ||
+                           String(s.id || '').toLowerCase().includes(searchStr);
+      
+      const matchesBranch = !branchFilter || branchFilter === 'All' || s.branch === branchFilter;
+      const matchesLocation = !locationFilter || locationFilter === 'All' || s.location === locationFilter;
+      
+      return matchesSearch && matchesBranch && matchesLocation;
     });
-  }, [students, search, branchFilter]);
+  }, [students, search, branchFilter, locationFilter]);
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
@@ -211,28 +274,56 @@ export default function Students() {
   };
 
   const handleEdit = (student) => {
-    setSelectedStudent(student);
+    setSelectedStudent({
+      ...student,
+      courseId: student.courseId ? String(student.courseId) : ''
+    });
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this student record?')) {
-      setStudents(students.filter(s => s.id !== id));
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this student record? This cannot be undone.')) {
+      try {
+        await api.delete(`/students/${id}`);
+        setStudents(prev => prev.filter(s => s.id !== id));
+      } catch (err) {
+        console.error("Failed to delete", err);
+        const msg = err.response?.data?.message || 'Could not delete student. Please try again.';
+        alert(`Error: ${msg}`);
+      }
     }
   };
 
-  const handleSave = (data) => {
-    if (selectedStudent) {
-      setStudents(students.map(s => s.id === selectedStudent.id ? { ...s, ...data } : s));
-    } else {
-      const newStudent = {
-        ...data,
-        id: `STU-2024-00${students.length + 1}`,
-        joinDate: new Date().toISOString().split('T')[0]
+  const handleSave = async (data) => {
+    try {
+      const names = data.name.split(' ');
+      const payload = {
+        firstName: names[0] || '',
+        lastName: names.slice(1).join(' ') || '',
+        email: data.email,
+        phone: data.phone,
+        active: data.status === 'Active',
+        courseId: data.courseId ? parseInt(data.courseId) : null,
+        branch: data.branch,
+        location: data.location,
+        feeAmount: data.feeAmount ? parseFloat(data.feeAmount) : 0,
+        username: data.username,
+        password: data.password
       };
-      setStudents([...students, newStudent]);
+
+      if (selectedStudent) {
+        await api.put(`/students/${selectedStudent.id}`, payload);
+      } else {
+        await api.post('/students', payload);
+      }
+      fetchStudents();
+    } catch (err) {
+      console.error("Failed to save", err);
+      const message = err.response?.data?.message || "Failed to save to database. Please check all fields.";
+      alert(message);
+    } finally {
+      setIsModalOpen(false);
     }
-    setIsModalOpen(false);
   };
 
   return (
@@ -280,6 +371,17 @@ export default function Students() {
                   {branches.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-background border border-border">
+                <Building className="w-4 h-4 text-muted-foreground" />
+                <select 
+                  value={locationFilter}
+                  onChange={(e) => setLocationFilter(e.target.value)}
+                  className="bg-transparent border-none outline-none text-sm font-medium text-foreground pr-4"
+                >
+                  <option value="All">All Locations</option>
+                  {locations.map(l => <option key={l} value={l}>{l}</option>)}
+                </select>
+              </div>
             </div>
           </div>
 
@@ -312,8 +414,8 @@ export default function Students() {
                     <p className="text-xs font-medium text-foreground">{s.course}</p>
                   </div>
                   <div className="space-y-1 text-right">
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase">Branch</p>
-                    <p className="text-xs font-medium text-foreground">{s.branch}</p>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase">Branch & Location</p>
+                    <p className="text-xs font-medium text-foreground">{s.branch} • {s.location}</p>
                   </div>
                 </div>
 
@@ -378,7 +480,7 @@ export default function Students() {
                         <div className="text-sm font-medium text-foreground">{s.course}</div>
                         <div className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
                           <Building className="w-3 h-3 text-indigo-400" />
-                          {s.branch}
+                          {s.branch} • {s.location}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

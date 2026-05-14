@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Filter, ChevronUp, ChevronDown, Eye, MoreHorizontal } from 'lucide-react';
-import { recentStudents } from '../data/mockData';
+import { Search, Filter, ChevronUp, ChevronDown, Eye, MoreHorizontal, Loader2 } from 'lucide-react';
+import api from '../lib/axios';
 import { cn } from '../lib/utils';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
+import { Link } from 'react-router-dom';
 
 const statusMap = {
   Active: 'success',
@@ -17,12 +18,57 @@ const feesMap = {
   Overdue: 'destructive',
 };
 
+const avatarColors = [
+  'bg-indigo-500',
+  'bg-emerald-500',
+  'bg-amber-500',
+  'bg-rose-500',
+  'bg-sky-500',
+  'bg-violet-500'
+];
+
 export default function RecentStudentsTable() {
+  const [students, setStudents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [sortField, setSortField] = useState(null);
   const [sortDir, setSortDir] = useState('asc');
 
-  const filtered = recentStudents.filter(
+  useEffect(() => {
+    const fetchRecentStudents = async () => {
+      try {
+        const response = await api.get('/students');
+        const mapped = response.data.map((dto, idx) => {
+          // Format fee status: PAID -> Paid, PENDING -> Pending
+          const formattedFees = dto.feeStatus 
+            ? dto.feeStatus.charAt(0).toUpperCase() + dto.feeStatus.slice(1).toLowerCase()
+            : 'Paid';
+
+          return {
+            id: String(dto.id),
+            name: `${dto.firstName} ${dto.lastName}`,
+            course: dto.course || 'Unassigned',
+            batch: 'Morning', // Mock for now
+            status: dto.active !== false ? 'Active' : 'Inactive',
+            fees: formattedFees,
+            joinDate: dto.enrollmentDate || '2026-05-11',
+            avatar: dto.firstName.charAt(0),
+            avatarColor: avatarColors[idx % avatarColors.length]
+          };
+        });
+        // Show only latest 5
+        setStudents(mapped.slice(0, 5));
+      } catch (err) {
+        console.error("Failed to fetch recent students", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRecentStudents();
+  }, []);
+
+  const filtered = students.filter(
     (s) =>
       s.name.toLowerCase().includes(search.toLowerCase()) ||
       s.course.toLowerCase().includes(search.toLowerCase()) ||
@@ -31,8 +77,8 @@ export default function RecentStudentsTable() {
 
   const sorted = sortField
     ? [...filtered].sort((a, b) => {
-        const av = a[sortField];
-        const bv = b[sortField];
+        const av = String(a[sortField]);
+        const bv = String(b[sortField]);
         return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
       })
     : filtered;
@@ -55,6 +101,15 @@ export default function RecentStudentsTable() {
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className="bg-[rgb(var(--card))] rounded-2xl border border-[rgb(var(--border))] p-20 flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+        <p className="text-sm text-muted-foreground font-medium">Loading recent data...</p>
+      </div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -67,7 +122,7 @@ export default function RecentStudentsTable() {
         <div>
           <h3 className="text-base font-bold text-[rgb(var(--foreground))]">Recent Students</h3>
           <p className="text-xs text-[rgb(var(--muted-foreground))] mt-0.5">
-            {sorted.length} students shown
+            {sorted.length} students shown from database
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -182,9 +237,11 @@ export default function RecentStudentsTable() {
                 {/* Actions */}
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <Eye className="w-3.5 h-3.5" />
-                    </Button>
+                    <Link to={`/admin/students/${student.id}`}>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Eye className="w-3.5 h-3.5" />
+                      </Button>
+                    </Link>
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                       <MoreHorizontal className="w-3.5 h-3.5" />
                     </Button>
@@ -199,12 +256,13 @@ export default function RecentStudentsTable() {
       {/* Footer */}
       <div className="px-5 py-3 border-t border-[rgb(var(--border))] flex items-center justify-between">
         <p className="text-xs text-[rgb(var(--muted-foreground))]">
-          Showing {sorted.length} of {recentStudents.length} students
+          Showing {sorted.length} of {students.length} database records
         </p>
-        <button className="text-xs text-indigo-400 font-medium hover:text-indigo-300 transition-colors">
+        <Link to="/admin/students" className="text-xs text-indigo-400 font-medium hover:text-indigo-300 transition-colors">
           View all students →
-        </button>
+        </Link>
       </div>
     </motion.div>
   );
 }
+

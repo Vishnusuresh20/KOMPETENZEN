@@ -6,7 +6,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { courseDistribution } from '../data/mockData';
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -22,12 +21,18 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-const COLORS = ['#6366f1', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4'];
+const BRANCH_COLORS = {
+  'KOMPETENZEN TECH': '#818cf8',
+  'KOMPETENZEN B-SCHOOL': '#a78bfa',
+  'KOMPETENZEN FINISHING SCHOOL': '#f43f5e'
+};
 
-export default function CourseDistributionChart({ data }) {
-  const chartData = (data || courseDistribution).map((item, index) => ({
+const DEFAULT_COLORS = ['#818cf8', '#a78bfa', '#f43f5e', '#fbbf24', '#2dd4bf'];
+
+export default function BranchDistributionChart({ data }) {
+  const chartData = (data || []).map((item, index) => ({
     ...item,
-    color: item.color || COLORS[index % COLORS.length]
+    color: BRANCH_COLORS[item.name] || DEFAULT_COLORS[index % DEFAULT_COLORS.length]
   }));
   
   const total = chartData.reduce((s, d) => s + d.value, 0);
@@ -36,13 +41,13 @@ export default function CourseDistributionChart({ data }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.6, duration: 0.4 }}
-      className="bg-[rgb(var(--card))] rounded-2xl border border-[rgb(var(--border))] p-5 shadow-lg"
+      transition={{ delay: 0.5, duration: 0.4 }}
+      className="bg-[rgb(var(--card))] rounded-2xl border border-[rgb(var(--border))] p-5 shadow-lg h-full"
     >
       <div className="mb-4">
-        <h3 className="text-base font-bold text-[rgb(var(--foreground))]">Course Distribution</h3>
+        <h3 className="text-base font-bold text-[rgb(var(--foreground))]">Branch Distribution</h3>
         <p className="text-xs text-[rgb(var(--muted-foreground))] mt-0.5">
-          {total} students across {chartData.length} courses
+          Student split across {chartData.length} divisions
         </p>
       </div>
 
@@ -52,9 +57,9 @@ export default function CourseDistributionChart({ data }) {
             data={chartData}
             cx="50%"
             cy="50%"
-            innerRadius={50}
-            outerRadius={80}
-            paddingAngle={3}
+            innerRadius={60}
+            outerRadius={85}
+            paddingAngle={5}
             dataKey="value"
           >
             {chartData.map((entry, index) => (
@@ -66,16 +71,16 @@ export default function CourseDistributionChart({ data }) {
       </ResponsiveContainer>
 
       {/* Legend */}
-      <div className="space-y-3 mt-4 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="space-y-3 mt-4 max-h-[180px] overflow-y-auto pr-2 custom-scrollbar">
         {chartData.map((item) => (
-          <div key={item.name} className="flex flex-col gap-1.5 p-2 rounded-xl bg-muted/20 border border-border/50 group hover:border-white/20 transition-all">
+          <div key={item.name} className="flex flex-col gap-1.5 p-2 rounded-xl bg-muted/20 border border-border/50 group hover:border-white/10 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span
                   className="w-2 h-2 rounded-full flex-shrink-0"
                   style={{ background: item.color, boxShadow: `0 0 10px ${item.color}` }}
                 />
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider truncate max-w-[120px]">{item.name}</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider truncate max-w-[150px]">{item.name}</span>
               </div>
               <span className="text-xs font-black text-foreground">
                 {item.value}
@@ -99,4 +104,3 @@ export default function CourseDistributionChart({ data }) {
     </motion.div>
   );
 }
-

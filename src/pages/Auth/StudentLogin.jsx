@@ -18,6 +18,7 @@ import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../context/ThemeContext';
+import api from '../../lib/axios';
 
 export default function StudentLogin() {
   const navigate = useNavigate();
@@ -37,47 +38,37 @@ export default function StudentLogin() {
     setError('');
 
     try {
-      // Simulate API call to Spring Boot backend
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const response = await api.post('/auth/login', {
+        username: formData.studentId,
+        password: formData.password
+      });
       
-      // More flexible validation for demo purposes
-      if (formData.studentId && formData.password.length >= 6) {
-        localStorage.setItem('role', 'student');
-        localStorage.setItem('token', 'mock-student-jwt');
+      const { token, role, userDetails } = response.data;
+      
+      if (role === 'STUDENT') {
+        localStorage.setItem('token', token);
+        localStorage.setItem('role', role);
         
-        // Simulating finding the student in a database
-        // In a real app, the backend would return this info
-        let displayName = formData.studentId;
-        let displayCourse = 'Full Stack Development';
-        let displayModule = 'Backend with Spring Boot';
-
-        if (formData.studentId.toLowerCase().includes('harsha')) {
-          displayName = 'Harsha';
-          displayCourse = 'JAVA';
-          displayModule = 'Java Basics';
-        } else if (formData.studentId.toLowerCase().includes('ponnu')) {
-          displayName = 'Ponnu';
-          displayCourse = 'BCOM';
-          displayModule = 'Financial Accounting';
-        } else if (formData.studentId.toLowerCase().includes('vishnu')) {
-          displayName = 'Vishnu';
-        } else if (formData.studentId.length < 10) {
-          // Capitalize first letter of any short ID to use as name
-          displayName = formData.studentId.charAt(0).toUpperCase() + formData.studentId.slice(1);
-        } else {
-          displayName = 'Arjun Menon';
-        }
+        // Use backend details if available, otherwise fallback to username
+        const displayName = userDetails?.firstName || formData.studentId;
+        const displayCourse = userDetails?.course || 'Full Stack Development';
+        const displayModule = 'Backend with Spring Boot'; // Update when module info is in backend
         
         localStorage.setItem('studentName', displayName);
+        localStorage.setItem('userName', displayName);
         localStorage.setItem('studentCourse', displayCourse);
         localStorage.setItem('studentModule', displayModule);
         
         navigate('/student/dashboard'); 
       } else {
-        setError('Invalid Student ID or password. Password must be at least 6 characters.');
+        setError('Access denied. Student privileges required.');
       }
     } catch (err) {
-      setError('System unavailable. Please try again later.');
+      if (err.response && err.response.status === 401) {
+        setError('Invalid credentials. Please check your Student ID and password.');
+      } else {
+        setError('Connection failed. Please ensure the backend server is running.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -120,6 +111,12 @@ export default function StudentLogin() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              
+              {/* Autofill Decoy - Intercepts browser autofill */}
+              <div style={{ position: 'absolute', opacity: 0, height: 0, width: 0, overflow: 'hidden', zIndex: -1 }}>
+                <input type="text" name="fake_stu_user" tabIndex="-1" />
+                <input type="password" name="fake_stu_pass" tabIndex="-1" />
+              </div>
 
               <div className="space-y-2">
                 <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Student ID</label>
@@ -130,10 +127,14 @@ export default function StudentLogin() {
                   <input
                     type="text"
                     required
+                    name="student-id-final"
+                    autoComplete="off"
+                    readOnly
+                    onFocus={(e) => e.target.removeAttribute('readonly')}
                     value={formData.studentId}
                     onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
                     className="w-full pl-11 pr-4 py-3 rounded-xl bg-muted/50 border border-border/50 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 transition-all placeholder:text-muted-foreground/50"
-                    placeholder="e.g. STU-2024-001"
+                    placeholder="e.g. STU-2026-001"
                   />
                 </div>
               </div>
@@ -141,9 +142,6 @@ export default function StudentLogin() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between ml-1">
                   <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Password</label>
-                  <Link to="/auth/forgot-password" size="sm" className="text-xs font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">
-                    Reset Password
-                  </Link>
                 </div>
                 <div className="relative group">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-500 transition-colors">
@@ -152,6 +150,10 @@ export default function StudentLogin() {
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
+                    name="student-password-final"
+                    autoComplete="new-password"
+                    readOnly
+                    onFocus={(e) => e.target.removeAttribute('readonly')}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="w-full pl-11 pr-12 py-3 rounded-xl bg-muted/50 border border-border/50 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 transition-all placeholder:text-muted-foreground/50"

@@ -1,20 +1,54 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, CheckCircle2, PlayCircle, FileText, Lock, Clock } from 'lucide-react';
+import { BookOpen, CheckCircle2, PlayCircle, FileText, Lock, Clock, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { cn } from '../lib/utils';
+import api from '../lib/axios';
 
 export default function StudentCourses() {
-  const courseName = localStorage.getItem('studentCourse') || "Full Stack Development";
-  
-  const modules = [
-    { title: 'Introduction to Programming', status: 'Completed', lessons: 12, totalLessons: 12, color: 'emerald' },
-    { title: 'Database Design & SQL', status: 'Completed', lessons: 8, totalLessons: 8, color: 'emerald' },
-    { title: 'Backend with Spring Boot', status: 'In Progress', lessons: 12, totalLessons: 18, color: 'indigo' },
-    { title: 'Frontend with React', status: 'Locked', lessons: 0, totalLessons: 20, color: 'slate' },
-    { title: 'Project Management & Deployment', status: 'Locked', lessons: 0, totalLessons: 10, color: 'slate' },
-  ];
+  const [course, setCourse] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSyllabus = async () => {
+      try {
+        // 1. Get student profile to find their course
+        const profileRes = await api.get('/students/me');
+        const courseTitle = profileRes.data.course;
+        
+        // 2. Fetch all courses and find the one that matches this title
+        // Note: In a real app we'd use courseId, but this is a safe bridge
+        const coursesRes = await api.get('/courses');
+        const matchedCourse = coursesRes.data.find(c => c.title === courseTitle);
+        
+        if (matchedCourse) {
+          // 3. Fetch full details (with modules)
+          const detailRes = await api.get(`/courses/${matchedCourse.id}`);
+          setCourse(detailRes.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch syllabus", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSyllabus();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+        <p className="text-sm text-muted-foreground font-medium">Loading your syllabus...</p>
+      </div>
+    );
+  }
+
+  const modules = course?.modules || [];
+  const courseName = course?.title || "No Course Assigned";
 
   return (
     <div className="space-y-8 animate-in">
@@ -29,55 +63,57 @@ export default function StudentCourses() {
       <div className="grid grid-cols-1 gap-6">
         {modules.map((mod, idx) => (
           <motion.div
-            key={mod.title}
+            key={idx}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: idx * 0.1 }}
           >
             <Card className={cn(
-              "border-border/50 bg-card/50 backdrop-blur-xl shadow-xl group hover:border-emerald-500/20 transition-all",
-              mod.status === 'Locked' && "opacity-60"
+              "border-border/50 bg-card backdrop-blur-xl shadow-lg hover:shadow-xl group hover:border-indigo-500/20 transition-all",
+              idx > 2 && "opacity-85"
             )}>
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div className="flex items-start gap-4">
                     <div className={cn(
-                      "w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0",
-                      mod.status === 'Completed' ? "bg-emerald-500/10 text-emerald-400" :
-                      mod.status === 'In Progress' ? "bg-indigo-500/10 text-indigo-400" : "bg-slate-500/10 text-slate-400"
+                      "w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm",
+                      idx <= 1 ? "bg-emerald-500/10 text-emerald-500" :
+                      idx === 2 ? "bg-indigo-500/10 text-indigo-500" : "bg-slate-500/10 text-slate-400"
                     )}>
-                      {mod.status === 'Locked' ? <Lock className="w-6 h-6" /> : <BookOpen className="w-6 h-6" />}
+                      {idx > 2 ? <Lock className="w-5 h-5 opacity-70" /> : <BookOpen className="w-5 h-5" />}
                     </div>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-lg font-bold text-foreground">{mod.title}</h3>
+                        <h4 className="text-base font-bold text-foreground">{mod.title}</h4>
                         <Badge variant={
-                          mod.status === 'Completed' ? 'success' : 
-                          mod.status === 'In Progress' ? 'indigo' : 'secondary'
-                        } className="text-[10px]">
-                          {mod.status}
+                          idx <= 1 ? 'success' : 
+                          idx === 2 ? 'indigo' : 'secondary'
+                        } className="text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-widest">
+                          {idx <= 1 ? 'Completed' : idx === 2 ? 'In Progress' : 'Locked'}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        {mod.lessons} of {mod.totalLessons} lessons completed · {((mod.lessons/mod.totalLessons)*100).toFixed(0)}% Overall Progress
+                      <p className="text-xs text-muted-foreground font-medium line-clamp-1">
+                        {mod.description || "Module documentation and resources available."}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="sm" className="text-xs font-bold gap-2 hover:bg-emerald-500/10 text-emerald-400">
+                    <Button variant="ghost" size="sm" className="text-xs font-bold gap-2 hover:bg-indigo-500/10 text-indigo-500 rounded-xl px-4">
                       <FileText className="w-4 h-4" />
                       Materials
                     </Button>
                     <Button 
-                      disabled={mod.status === 'Locked'}
+                      disabled={idx > 2}
                       className={cn(
-                        "rounded-xl font-bold gap-2 px-6",
-                        mod.status === 'In Progress' ? "gradient-indigo text-white shadow-lg shadow-indigo-500/20" : "bg-muted/50 text-muted-foreground"
+                        "rounded-xl font-bold gap-2 px-6 h-10 shadow-sm transition-all",
+                        idx === 2 ? "gradient-indigo text-white shadow-indigo-500/20 hover:scale-105" : 
+                        idx <= 1 ? "gradient-emerald text-white shadow-emerald-500/20 hover:scale-105" :
+                        "bg-slate-400 text-white opacity-90 cursor-not-allowed"
                       )}
                     >
-                      {mod.status === 'Completed' ? 'Review' : mod.status === 'In Progress' ? 'Continue' : 'Locked'}
-                      {mod.status !== 'Locked' && <PlayCircle className="w-4 h-4" />}
+                      {idx <= 1 ? 'Review' : idx === 2 ? 'Continue' : 'Locked'}
+                      {idx <= 2 && <PlayCircle className="w-4 h-4" />}
                     </Button>
                   </div>
                 </div>
@@ -86,11 +122,11 @@ export default function StudentCourses() {
                 <div className="mt-6 h-1.5 bg-muted rounded-full overflow-hidden">
                   <motion.div 
                     initial={{ width: 0 }}
-                    animate={{ width: `${(mod.lessons/mod.totalLessons)*100}%` }}
+                    animate={{ width: idx <= 1 ? '100%' : idx === 2 ? '45%' : '0%' }}
                     transition={{ duration: 1, delay: idx * 0.1 + 0.5 }}
                     className={cn(
                       "h-full rounded-full",
-                      mod.status === 'Completed' ? "bg-emerald-500" : "bg-indigo-500"
+                      idx <= 1 ? "bg-emerald-500" : "bg-indigo-500"
                     )} 
                   />
                 </div>

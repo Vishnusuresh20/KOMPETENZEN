@@ -474,7 +474,7 @@ export default function Landing() {
                 <span className="font-bold text-lg tracking-tight gradient-text">Kompetenzen</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Empowering institutions with cutting-edge management tools since 2024.
+                Empowering institutions with cutting-edge management tools since 2026.
               </p>
             </div>
 

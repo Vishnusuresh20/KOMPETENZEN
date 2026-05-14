@@ -1,11 +1,40 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar as CalendarIcon, Clock, Video, Users } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, Video, Users, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
+import api from '../lib/axios';
 
 export default function StudentSchedule() {
+  const [student, setStudent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const currentCourse = localStorage.getItem('studentCourse') || "Full Stack Development";
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await api.get('/students/me');
+        setStudent(response.data);
+      } catch (err) {
+        console.error("Failed to fetch schedule profile", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+        <p className="text-muted-foreground font-medium text-sm tracking-wide">Loading schedule...</p>
+      </div>
+    );
+  }
+
+  const currentCourse = student?.course || "Full Stack Development";
+  const timeSlot = student?.timeSlot || "11:00 AM - 01:00 PM";
 
   return (
     <div className="space-y-8 animate-in">
@@ -13,7 +42,7 @@ export default function StudentSchedule() {
         <h1 className="text-3xl font-bold text-foreground tracking-tight">Academic Schedule</h1>
         <p className="text-muted-foreground mt-1 flex items-center gap-2">
           <Clock className="w-4 h-4 text-emerald-400" />
-          Standard Session Time: <span className="font-bold text-foreground">11:00 AM - 01:00 PM</span>
+          Standard Session Time: <span className="font-bold text-foreground">{timeSlot}</span>
         </p>
       </div>
 
@@ -22,7 +51,7 @@ export default function StudentSchedule() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
             <div className="space-y-1">
               <h3 className="text-xl font-bold text-foreground">Current Weekly Timetable</h3>
-              <p className="text-sm text-muted-foreground">Main Institution · Batch 2024-A</p>
+              <p className="text-sm text-muted-foreground">Main Institution · Batch 2026-A</p>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-sm font-bold">
                <CalendarIcon className="w-4 h-4" />
@@ -56,7 +85,7 @@ export default function StudentSchedule() {
 
                 <div className="flex flex-wrap items-center gap-6 text-right">
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold text-foreground">11:00 AM - 01:00 PM</span>
+                    <span className="text-sm font-bold text-foreground">{timeSlot}</span>
                     <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-0.5">Duration: 2 Hours</span>
                   </div>
                   <div className="flex items-center gap-3">

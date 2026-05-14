@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   AreaChart, 
@@ -11,32 +12,22 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer,
-  Legend
+  ResponsiveContainer
 } from 'recharts';
 import { 
   TrendingUp, 
   Users, 
   Building2, 
-  DollarSign, 
   ArrowUpRight, 
   Download, 
   Filter,
   Calendar,
-  Wallet,
-  PieChart as PieIcon,
-  BarChart3
+  Loader2
 } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { 
-  revenueData, 
-  branchPerformance, 
-  studentGrowthData, 
-  categoryFinancials,
-  feeStats 
-} from '../data/mockData';
+import api from '../lib/axios';
 import { cn } from '../lib/utils';
 
 const COLORS = ['#6366f1', '#10b981', '#8b5cf6', '#f59e0b', '#06b6d4'];
@@ -44,13 +35,19 @@ const COLORS = ['#6366f1', '#10b981', '#8b5cf6', '#f59e0b', '#06b6d4'];
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-card/95 border border-border p-3 rounded-xl shadow-2xl backdrop-blur-md">
-        <p className="text-xs font-bold text-foreground mb-1">{label}</p>
-        {payload.map((entry, index) => (
-          <p key={index} className="text-xs font-medium" style={{ color: entry.color }}>
-            {entry.name}: ₹{entry.value.toLocaleString()}
-          </p>
-        ))}
+      <div className="bg-slate-950/80 border border-white/10 p-4 rounded-2xl shadow-2xl backdrop-blur-xl ring-1 ring-white/5">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 border-b border-white/10 pb-2">{label}</p>
+        <div className="space-y-1.5">
+          {payload.map((entry, index) => (
+            <div key={index} className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: entry.color }} />
+                <span className="text-xs font-medium text-slate-300">{entry.name}</span>
+              </div>
+              <span className="text-xs font-bold text-white">₹{entry.value.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -58,6 +55,40 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function Reports() {
+  const [reportData, setReportData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchReport();
+  }, []);
+
+  const fetchReport = async () => {
+    try {
+      const response = await api.get('/reports/financial');
+      setReportData(response.data);
+    } catch (err) {
+      console.error("Failed to fetch report", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const reportStats = [
+    { label: 'Total Collection', value: `₹${reportData?.totalCollected?.toLocaleString('en-IN') || 0}`, change: '+12%', color: 'emerald' },
+    { label: 'Pending Dues', value: `₹${reportData?.totalPending?.toLocaleString('en-IN') || 0}`, change: '-5%', color: 'rose' },
+    { label: 'Active Students', value: reportData?.totalStudents?.toString() || '0', change: '+2', color: 'indigo' },
+    { label: 'Overdue Cases', value: reportData?.overdueCount?.toString() || '0', change: '0', color: 'violet' },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+        <p className="text-muted-foreground font-medium text-sm tracking-wide">Generating institutional analytics...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in">
       {/* Header */}
@@ -66,7 +97,7 @@ export default function Reports() {
           <h1 className="text-3xl font-bold text-foreground tracking-tight">Institutional Analytics</h1>
           <p className="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
             <TrendingUp className="w-4 h-4 text-emerald-400" />
-            Performance insights for FY 2024-25
+            Performance insights based on live data
           </p>
         </div>
         
@@ -84,7 +115,7 @@ export default function Reports() {
 
       {/* Analytics Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {feeStats.map((stat, idx) => (
+        {reportStats.map((stat, idx) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
@@ -112,7 +143,7 @@ export default function Reports() {
         ))}
       </div>
 
-      {/* Revenue & Growth Row */}
+      {/* Revenue Trajectory & Branch Dist */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <Card className="lg:col-span-2 border-border/50 bg-card/50 backdrop-blur-xl shadow-xl">
           <CardContent className="p-8">
@@ -123,62 +154,53 @@ export default function Reports() {
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-muted/50 border border-border text-xs">
                 <Calendar className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Last 12 Months</span>
+                <span>Current Year</span>
               </div>
             </div>
             <div className="h-[350px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={revenueData}>
+                <AreaChart data={reportData?.monthlyIncome || []}>
                   <defs>
                     <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.15}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#818cf8" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#818cf8" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
-                  <XAxis dataKey="month" stroke="rgba(255,255,255,0.2)" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke="rgba(255,255,255,0.2)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => `₹${v/1000}k`} />
+                  <XAxis dataKey="month" stroke="rgba(255,255,255,0.2)" fontSize={11} tickLine={false} axisLine={false} dy={10} />
+                  <YAxis stroke="rgba(255,255,255,0.2)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => `₹${(v/1000).toFixed(0)}k`} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Area type="monotone" dataKey="revenue" stroke="#6366f1" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
-                  <Area type="monotone" dataKey="fees" stroke="#10b981" strokeWidth={2} fill="transparent" strokeDasharray="5 5" />
+                  <Area type="monotone" dataKey="revenue" name="Collected" stroke="#818cf8" strokeWidth={4} fillOpacity={1} fill="url(#colorRev)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
+        {/* Branch Split */}
         <Card className="border-border/50 bg-card/50 backdrop-blur-xl shadow-xl">
-          <CardContent className="p-8 text-center flex flex-col items-center justify-center">
-            <h3 className="text-lg font-bold text-foreground mb-6">Financial Distribution</h3>
+          <CardContent className="p-8">
+            <h3 className="text-lg font-bold text-foreground mb-6">Division Revenue</h3>
             <div className="h-[220px] w-full mb-8">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={categoryFinancials}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey="amount"
-                    nameKey="category"
+                    data={reportData?.branchPerformance || []}
+                    innerRadius={60} outerRadius={85} paddingAngle={5} dataKey="revenue"
                   >
-                    {categoryFinancials.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} stroke="transparent" />
+                    {(reportData?.branchPerformance || []).map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip content={<CustomTooltip />} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="space-y-3 w-full">
-               {categoryFinancials.map((cat, idx) => (
-                 <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-muted/20 border border-border">
-                    <div className="flex items-center gap-2">
-                       <div className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
-                       <span className="text-[11px] font-bold text-muted-foreground">{cat.category}</span>
-                    </div>
-                    <span className="text-xs font-bold text-foreground">₹{(cat.amount/1000).toFixed(1)}k</span>
+            <div className="space-y-3">
+               {(reportData?.branchPerformance || []).map((b, idx) => (
+                 <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-muted/20 border border-border text-xs">
+                    <span className="font-bold text-muted-foreground">{b.name}</span>
+                    <span className="font-bold text-foreground">₹{b.revenue?.toLocaleString()}</span>
                  </div>
                ))}
             </div>
@@ -186,65 +208,68 @@ export default function Reports() {
         </Card>
       </div>
 
-      {/* Branch & Enrollment Row */}
+      {/* Campus & Course Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Campus Location Performance */}
         <Card className="border-border/50 bg-card/50 backdrop-blur-xl shadow-xl">
           <CardContent className="p-8">
             <h3 className="text-lg font-bold text-foreground mb-8 flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-amber-400" />
-              Branch Performance Audit
+              <Building2 className="w-5 h-5 text-indigo-400" />
+              Campus Financial Audit
             </h3>
-            <div className="space-y-5">
-               {branchPerformance.map((branch, idx) => (
-                 <div key={idx} className="p-6 rounded-2xl border border-border bg-muted/20 group hover:border-indigo-500/30 transition-all">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                       <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold">
-                             {branch.name.charAt(0)}
-                          </div>
-                          <div>
-                             <h4 className="text-base font-bold text-foreground">{branch.name}</h4>
-                             <p className="text-xs text-muted-foreground">{branch.students} Active Students</p>
-                          </div>
-                       </div>
-                       <div className="flex items-center gap-8 text-right">
-                          <div>
-                             <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Gross Revenue</p>
-                             <p className="text-base font-extrabold text-foreground mt-1">₹{(branch.revenue/100000).toFixed(1)}L</p>
-                          </div>
-                          <Badge variant="success" className="h-fit">{branch.growth}</Badge>
-                       </div>
-                    </div>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={reportData?.locationPerformance || []}>
+                  <XAxis dataKey="name" stroke="rgba(255,255,255,0.2)" fontSize={11} axisLine={false} tickLine={false} />
+                  <YAxis stroke="rgba(255,255,255,0.2)" fontSize={11} axisLine={false} tickLine={false} tickFormatter={(v) => `₹${(v/1000).toFixed(0)}k`} />
+                  <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                  <Bar dataKey="revenue" radius={[6, 6, 0, 0]}>
+                    {(reportData?.locationPerformance || []).map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={index === 0 ? '#818cf8' : '#f43f5e'} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-6">
+               {(reportData?.locationPerformance || []).map((loc, idx) => (
+                 <div key={idx} className="p-4 rounded-2xl bg-muted/20 border border-border text-center">
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase">{loc.name}</p>
+                    <p className="text-lg font-black text-foreground mt-1">₹{loc.revenue?.toLocaleString()}</p>
+                    <p className="text-[10px] text-emerald-400 font-bold mt-1">{loc.students} Active Students</p>
                  </div>
                ))}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-border/50 bg-card/50 backdrop-blur-xl shadow-xl">
-          <CardContent className="p-8">
-            <h3 className="text-lg font-bold text-foreground mb-8 flex items-center gap-2">
+        {/* Course Performance List */}
+        <Card className="border-border/50 bg-card/50 backdrop-blur-xl shadow-xl overflow-hidden">
+          <div className="p-8 pb-4">
+            <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
               <Users className="w-5 h-5 text-emerald-400" />
-              Enrollment Growth Analytics
+              Academic Revenue Audit
             </h3>
-            <div className="h-[300px] w-full">
-               <ResponsiveContainer width="100%" height="100%">
-                 <BarChart data={studentGrowthData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
-                    <XAxis dataKey="month" stroke="rgba(255,255,255,0.2)" fontSize={11} tickLine={false} axisLine={false} />
-                    <YAxis stroke="rgba(255,255,255,0.2)" fontSize={11} tickLine={false} axisLine={false} />
-                    <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(99, 102, 241, 0.2)', borderRadius: '12px' }} />
-                    <Bar dataKey="new" name="New Admissions" fill="#10b981" radius={[6, 6, 0, 0]} barSize={40} />
-                    <Bar dataKey="total" name="Total Population" fill="#6366f1" radius={[6, 6, 0, 0]} barSize={40} />
-                 </BarChart>
-               </ResponsiveContainer>
-            </div>
-            <div className="mt-6 p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/10 text-center">
-               <p className="text-xs text-muted-foreground italic">
-                 New admissions peaked in <span className="font-bold text-indigo-400 underline">May 2024</span> with a 12% Month-on-Month growth.
-               </p>
-            </div>
-          </CardContent>
+          </div>
+          <div className="p-2 space-y-2 overflow-y-auto max-h-[460px] custom-scrollbar">
+             {(reportData?.coursePerformance || []).map((course, idx) => (
+               <div key={idx} className="p-4 mx-4 rounded-2xl border border-border bg-muted/20 flex items-center justify-between group hover:border-indigo-500/30 transition-all">
+                  <div className="flex items-center gap-3">
+                     <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold text-sm">
+                        {course.name.charAt(0)}
+                     </div>
+                     <div>
+                        <h4 className="text-sm font-bold text-foreground">{course.name}</h4>
+                        <p className="text-[10px] text-muted-foreground">{course.students} Students</p>
+                     </div>
+                  </div>
+                  <div className="text-right">
+                     <p className="text-sm font-black text-foreground">₹{course.revenue?.toLocaleString()}</p>
+                     <Badge variant="success" className="text-[9px] px-1.5 py-0 mt-1">Active</Badge>
+                  </div>
+               </div>
+             ))}
+          </div>
         </Card>
       </div>
     </div>

@@ -17,6 +17,7 @@ import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../context/ThemeContext';
+import api from '../../lib/axios';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -35,20 +36,27 @@ export default function AdminLogin() {
     setIsLoading(true);
     setError('');
 
-    // Mock Authentication Logic - Prepared for JWT Integration
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const response = await api.post('/auth/login', {
+        username: formData.username,
+        password: formData.password
+      });
       
-      if (formData.username === 'admin' && formData.password === 'admin123') {
-        // Here you would store the JWT token from Spring Boot
-        localStorage.setItem('token', 'mock-jwt-token');
+      const { token, role } = response.data;
+      
+      if (role === 'ADMIN') {
+        localStorage.setItem('token', token);
+        localStorage.setItem('role', role);
         navigate('/admin/dashboard');
       } else {
-        setError('Invalid administrator credentials. Please check your username and password.');
+        setError('Access denied. Administrator privileges required.');
       }
     } catch (err) {
-      setError('Connection failed. Please ensure the backend server is running.');
+      if (err.response && err.response.status === 401) {
+        setError('Invalid credentials. Please check your username and password.');
+      } else {
+        setError('Connection failed. Please ensure the backend server is running.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -91,6 +99,12 @@ export default function AdminLogin() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              
+              {/* Autofill Decoy - Intercepts browser autofill */}
+              <div style={{ position: 'absolute', opacity: 0, height: 0, width: 0, overflow: 'hidden', zIndex: -1 }}>
+                <input type="text" name="fake_user" tabIndex="-1" />
+                <input type="password" name="fake_pass" tabIndex="-1" />
+              </div>
 
               <div className="space-y-2">
                 <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Username</label>
@@ -101,6 +115,10 @@ export default function AdminLogin() {
                   <input
                     type="text"
                     required
+                    name="admin-username-final"
+                    autoComplete="off"
+                    readOnly
+                    onFocus={(e) => e.target.removeAttribute('readonly')}
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                     className="w-full pl-11 pr-4 py-3 rounded-xl bg-muted/50 border border-border/50 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all placeholder:text-muted-foreground/50"
@@ -112,9 +130,6 @@ export default function AdminLogin() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between ml-1">
                   <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Password</label>
-                  <Link to="/auth/forgot-password" size="sm" className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">
-                    Forgot Password?
-                  </Link>
                 </div>
                 <div className="relative group">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-indigo-400 transition-colors">
@@ -123,6 +138,10 @@ export default function AdminLogin() {
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
+                    name="admin-password-final"
+                    autoComplete="new-password"
+                    readOnly
+                    onFocus={(e) => e.target.removeAttribute('readonly')}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="w-full pl-11 pr-12 py-3 rounded-xl bg-muted/50 border border-border/50 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all placeholder:text-muted-foreground/50"
