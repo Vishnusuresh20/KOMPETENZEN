@@ -101,12 +101,19 @@ export default function StudentSchedule() {
                   </div>
                   <div className="flex items-center gap-3 w-full md:w-auto">
                      <Badge variant="outline" className="flex-1 md:flex-none justify-center rounded-lg gap-1.5 border-border py-1.5 px-3">
-                        <Video className="w-3.5 h-3.5 text-indigo-400" />
-                        Online Zoom
+                        <Video className="w-3.5 h-3.5 text-emerald-400" />
+                        Google Meet
                      </Badge>
-                     <Badge className="flex-1 md:flex-none justify-center bg-emerald-500 hover:bg-emerald-600 text-white border-0 py-1.5 px-4 rounded-xl font-bold shadow-lg shadow-emerald-500/20">
-                        Join Class
-                     </Badge>
+                     <a 
+                       href="https://meet.google.com/xmh-skxv-uav" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex-1 md:flex-none"
+                     >
+                       <Badge className="w-full justify-center bg-emerald-500 hover:bg-emerald-600 text-white border-0 py-1.5 px-4 rounded-xl font-bold shadow-lg shadow-emerald-500/20 cursor-pointer transition-transform hover:scale-105 active:scale-95">
+                          Join Class
+                       </Badge>
+                     </a>
                   </div>
                 </div>
               </motion.div>
