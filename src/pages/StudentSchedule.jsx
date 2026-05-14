@@ -36,6 +36,15 @@ export default function StudentSchedule() {
   const currentCourse = student?.course || "Full Stack Development";
   const timeSlot = student?.timeSlot || "11:00 AM - 01:00 PM";
 
+  const getInstructor = (courseName) => {
+    const course = courseName?.toLowerCase() || "";
+    if (course.includes('java') || course.includes('python')) return "Nafia Shefin";
+    if (course.includes('science') || course.includes('design') || course.includes('ui') || course.includes('ux')) return "Akhil";
+    return "Ananthu"; 
+  };
+
+  const instructorName = getInstructor(currentCourse);
+
   return (
     <div className="space-y-8 animate-in">
       <div>
@@ -80,7 +89,7 @@ export default function StudentSchedule() {
                     </span>
                     <span className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
                        <Users className="w-3.5 h-3.5" />
-                       Instructor: Dr. Renu Das
+                       Instructor: {instructorName}
                     </span>
                   </div>
                 </div>
