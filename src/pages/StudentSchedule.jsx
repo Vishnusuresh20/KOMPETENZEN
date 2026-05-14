@@ -68,12 +68,14 @@ export default function StudentSchedule() {
                 transition={{ delay: idx * 0.1 }}
                 className="group flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl border border-border bg-muted/20 hover:bg-emerald-500/5 hover:border-emerald-500/30 transition-all cursor-default"
               >
-                <div className="flex items-center gap-6">
-                  <div className="w-32">
-                    <span className="text-sm font-extrabold text-foreground tracking-wider uppercase">{day}</span>
+                <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                  <div className="md:w-32 shrink-0">
+                    <span className="text-xs md:text-sm font-black text-emerald-400 md:text-foreground tracking-widest uppercase">
+                      {day}
+                    </span>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-base font-bold text-foreground group-hover:text-emerald-400 transition-colors">
+                    <span className="text-lg md:text-base font-bold text-foreground group-hover:text-emerald-400 transition-colors">
                        {currentCourse} - Live Session
                     </span>
                     <span className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
@@ -83,17 +85,17 @@ export default function StudentSchedule() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-6 text-right">
-                  <div className="flex flex-col">
+                <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 md:text-right">
+                  <div className="flex flex-col md:items-end">
                     <span className="text-sm font-bold text-foreground">{timeSlot}</span>
                     <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-0.5">Duration: 2 Hours</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                     <Badge variant="outline" className="rounded-lg gap-1.5 border-border py-1.5 px-3">
+                  <div className="flex items-center gap-3 w-full md:w-auto">
+                     <Badge variant="outline" className="flex-1 md:flex-none justify-center rounded-lg gap-1.5 border-border py-1.5 px-3">
                         <Video className="w-3.5 h-3.5 text-indigo-400" />
                         Online Zoom
                      </Badge>
-                     <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white border-0 py-1.5 px-4 rounded-xl font-bold shadow-lg shadow-emerald-500/20">
+                     <Badge className="flex-1 md:flex-none justify-center bg-emerald-500 hover:bg-emerald-600 text-white border-0 py-1.5 px-4 rounded-xl font-bold shadow-lg shadow-emerald-500/20">
                         Join Class
                      </Badge>
                   </div>
