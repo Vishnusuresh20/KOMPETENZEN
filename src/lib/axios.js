@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api', // Spring Boot backend
+  baseURL: 'https://kompetenzen-backend-production.up.railway.app/api', // Live Railway Backend
 });
 
 // Automatically attach the JWT token to every request if it exists
