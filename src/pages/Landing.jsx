@@ -373,7 +373,7 @@ export default function Landing() {
               <div className="space-y-6">
                 {[
                   { icon: Mail, label: 'Email', value: 'hello@kompetenzen.in', color: 'indigo' },
-                  { icon: Phone, label: 'Phone', value: '+91 484 000 0000', color: 'emerald' },
+                  { icon: Phone, label: 'Phone', value: '+91 9037859942', color: 'emerald' },
                   { icon: MapPin, label: 'Location', value: 'Vyttila, Ernakulam, Kerala', color: 'violet' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-4 p-4 rounded-2xl bg-muted/50 border border-border/50">
