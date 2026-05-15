@@ -209,8 +209,8 @@ export default function Landing() {
       <section id="stats" className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-8">
-            <Counter value="2500" label="Active Students" suffix="+" />
-            <Counter value="120" label="Expert Faculty" />
+            <Counter value="1500" label="Active Students" suffix="+" />
+            <Counter value="20" label="Expert Faculty" />
             <Counter value="98" label="Success Rate" suffix="%" />
             <Counter value="15" label="Industry Awards" />
           </div>
