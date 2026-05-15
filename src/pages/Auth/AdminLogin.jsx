@@ -173,14 +173,7 @@ export default function AdminLogin() {
               </Button>
             </form>
           </CardContent>
-          <div className="px-8 py-4 bg-muted/30 border-t border-border/50 text-center">
-            <p className="text-xs text-muted-foreground">
-              Are you a student? {' '}
-              <Link to="/auth/student-login" className="font-bold text-indigo-400 hover:text-indigo-300 transition-colors">
-                Go to Student Portal
-              </Link>
-            </p>
-          </div>
+
         </Card>
 
         <div className="mt-8 flex items-center justify-center gap-6 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
