@@ -18,7 +18,8 @@ import {
   CheckCircle2,
   Sun,
   Moon,
-  CreditCard
+  CreditCard,
+  X
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -86,8 +87,45 @@ export default function Landing() {
     restDelta: 0.001
   });
 
+  const [showDemo, setShowDemo] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-indigo-500/30">
+      {/* Video Modal */}
+      <AnimatePresence>
+        {showDemo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10 bg-background/80 backdrop-blur-2xl"
+            onClick={() => setShowDemo(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-5xl aspect-video rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setShowDemo(false)}
+                className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              
+              <video 
+                className="w-full h-full object-cover"
+                controls 
+                autoPlay
+                src="/videos/Demo.mp4"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Progress Bar */}
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-emerald-500 origin-left z-[100]" style={{ scaleX }} />
 
@@ -457,11 +495,12 @@ export default function Landing() {
                     Get Started Now
                   </button>
                 </Link>
-                <Link to="/auth/admin-login">
-                  <button className="px-12 h-16 rounded-full border-2 border-white/40 bg-white/10 text-white text-lg font-bold backdrop-blur-md hover:bg-white/20 transition-all">
-                    Live Demo
-                  </button>
-                </Link>
+                <button 
+                  onClick={() => setShowDemo(true)}
+                  className="px-12 h-16 rounded-full border-2 border-white/40 bg-white/10 text-white text-lg font-bold backdrop-blur-md hover:bg-white/20 transition-all hover:scale-105 active:scale-95"
+                >
+                  Live Demo
+                </button>
               </div>
             </motion.div>
           </div>
