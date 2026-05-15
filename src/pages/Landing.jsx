@@ -189,7 +189,7 @@ export default function Landing() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link to="/auth/admin-login">
                   <Button size="lg" className="rounded-full px-10 h-14 text-base font-semibold gradient-indigo shadow-xl shadow-indigo-500/25 w-full sm:w-auto">
-                    Get Started for Free
+                    Manage Institution
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
