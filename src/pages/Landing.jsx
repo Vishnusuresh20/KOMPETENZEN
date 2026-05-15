@@ -110,13 +110,13 @@ export default function Landing() {
             >
               <button 
                 onClick={() => setShowDemo(false)}
-                className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                className="absolute top-4 right-4 z-[210] w-12 h-12 rounded-full bg-black/40 backdrop-blur-xl flex items-center justify-center text-white hover:bg-rose-500 transition-all hover:rotate-90 shadow-2xl border border-white/10"
               >
                 <X className="w-6 h-6" />
               </button>
               
               <video 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 controls 
                 autoPlay
                 src="/videos/Demo.mp4"
