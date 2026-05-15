@@ -413,9 +413,15 @@ export default function Landing() {
                    <div className="p-6 rounded-2xl bg-card/50 border border-border backdrop-blur-xl shadow-xl max-w-sm">
                       <p className="text-sm font-bold text-foreground">Sahodaran Ayyappan Road</p>
                       <p className="text-xs text-muted-foreground mt-1">Vyttila, Ernakulam, Kerala 682019</p>
-                      <Button variant="link" className="text-indigo-400 p-0 h-auto mt-4 text-xs font-bold gap-1 uppercase tracking-widest">
-                         Open in Google Maps <ArrowRight className="w-3 h-3" />
-                      </Button>
+                      <a 
+                        href="https://www.google.com/maps/search/?api=1&query=Kompetenzen+Technologies+Vyttila+Ernakulam+Kerala" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        <Button variant="link" className="text-indigo-400 p-0 h-auto mt-4 text-xs font-bold gap-1 uppercase tracking-widest hover:text-indigo-300">
+                           Open in Google Maps <ArrowRight className="w-3 h-3" />
+                        </Button>
+                      </a>
                    </div>
                 </div>
 
