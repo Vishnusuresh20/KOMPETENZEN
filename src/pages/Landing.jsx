@@ -101,7 +101,7 @@ export default function Landing() {
             <span className="font-bold text-xl tracking-tight gradient-text">Kompetenzen</span>
           </div>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-8">
             {['Features', 'Stats', 'Testimonials', 'Contact'].map((item) => (
               <a 
                 key={item} 
@@ -145,7 +145,7 @@ export default function Landing() {
               </AnimatePresence>
             </Button>
             
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <Link to="/auth/student-login">
                 <Button variant="ghost" className="rounded-full px-5 text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/10">
                   Student Login
