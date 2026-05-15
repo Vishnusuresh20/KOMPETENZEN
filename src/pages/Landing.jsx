@@ -19,7 +19,11 @@ import {
   Sun,
   Moon,
   CreditCard,
-  X
+  X,
+  Briefcase,
+  Monitor,
+  TrendingUp,
+  Pin
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -31,12 +35,12 @@ import { useTheme } from '../context/ThemeContext';
 
 const Counter = ({ value, label, suffix = "" }) => {
   const [count, setCount] = useState(0);
-  
+
   useEffect(() => {
     let start = 0;
     const end = parseInt(value);
     if (start === end) return;
-    
+
     let timer = setInterval(() => {
       start += Math.ceil(end / 50);
       if (start >= end) {
@@ -46,7 +50,7 @@ const Counter = ({ value, label, suffix = "" }) => {
         setCount(start);
       }
     }, 30);
-    
+
     return () => clearInterval(timer);
   }, [value]);
 
@@ -108,16 +112,16 @@ export default function Landing() {
               className="relative w-full max-w-5xl aspect-video rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black"
               onClick={(e) => e.stopPropagation()}
             >
-              <button 
+              <button
                 onClick={() => setShowDemo(false)}
                 className="absolute top-4 right-4 z-[210] w-12 h-12 rounded-full bg-black/40 backdrop-blur-xl flex items-center justify-center text-white hover:bg-rose-500 transition-all hover:rotate-90 shadow-2xl border border-white/10"
               >
                 <X className="w-6 h-6" />
               </button>
-              
-              <video 
+
+              <video
                 className="w-full h-full object-contain"
-                controls 
+                controls
                 autoPlay
                 src="/videos/Demo.mp4"
               />
@@ -141,9 +145,9 @@ export default function Landing() {
 
           <div className="hidden lg:flex items-center gap-8">
             {['Features', 'Stats', 'Testimonials', 'Contact'].map((item) => (
-              <a 
-                key={item} 
-                href={`#${item.toLowerCase()}`} 
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
                 className="text-sm font-medium text-muted-foreground hover:text-indigo-400 transition-colors"
               >
                 {item}
@@ -182,7 +186,7 @@ export default function Landing() {
                 )}
               </AnimatePresence>
             </Button>
-            
+
             <div className="hidden md:flex items-center gap-2">
               <Link to="/auth/student-login">
                 <Button variant="ghost" className="rounded-full px-5 text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/10">
@@ -256,9 +260,9 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-32 relative overflow-hidden">
+      <section id="features" className="pt-32 pb-16 md:pb-32 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
-          <SectionHeader 
+          <SectionHeader
             badge="Powerhouse Features"
             title="Everything you need to scale your institution"
             subtitle="Our comprehensive suite of tools ensures that every aspect of your educational business is optimized for growth and efficiency."
@@ -266,39 +270,39 @@ export default function Landing() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { 
-                title: 'Smart Admissions', 
-                desc: 'Automate student enrollments and document processing with ease.', 
+              {
+                title: 'Smart Admissions',
+                desc: 'Automate student enrollments and document processing with ease.',
                 icon: Zap,
                 color: 'indigo'
               },
-              { 
-                title: 'Student Portals', 
-                desc: 'Dedicated dashboards for students to track their courses and daily schedules.', 
+              {
+                title: 'Student Portals',
+                desc: 'Dedicated dashboards for students to track their courses and daily schedules.',
                 icon: GraduationCap,
                 color: 'emerald'
               },
-              { 
-                title: 'Advanced Analytics', 
-                desc: 'Real-time revenue reports and student progress dashboards.', 
+              {
+                title: 'Advanced Analytics',
+                desc: 'Real-time revenue reports and student progress dashboards.',
                 icon: BarChart3,
                 color: 'violet'
               },
-              { 
-                title: 'Fee Lifecycle', 
-                desc: 'End-to-end tracking of student payments, installments, and pending dues.', 
+              {
+                title: 'Fee Lifecycle',
+                desc: 'End-to-end tracking of student payments, installments, and pending dues.',
                 icon: CreditCard,
                 color: 'rose'
               },
-              { 
-                title: 'Cloud Access', 
-                desc: 'Access your institution data from anywhere in the world.', 
+              {
+                title: 'Cloud Access',
+                desc: 'Access your institution data from anywhere in the world.',
                 icon: Globe,
                 color: 'amber'
               },
-              { 
-                title: 'Student Success', 
-                desc: 'Track grades, attendance and placement progress in one place.', 
+              {
+                title: 'Student Success',
+                desc: 'Track grades, attendance and placement progress in one place.',
                 icon: Users,
                 color: 'indigo'
               },
@@ -330,10 +334,117 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Three Schools Section (Lovable Style) */}
+      <section id="schools" className="pt-10 pb-20 md:py-20 relative overflow-hidden bg-[#0A0A14]">
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+
+          {/* Cards Layout */}
+          <div className="relative flex flex-col md:flex-row items-center justify-center mt-2 md:mt-12 mb-16 gap-6 md:gap-0 w-full max-w-6xl mx-auto">
+            
+            {/* Left Card: B-School */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+              viewport={{ once: true }}
+              className="z-10 w-full md:w-[40%] md:mr-[-8%] md:scale-90 md:hover:scale-95 opacity-100 md:opacity-70 md:hover:opacity-100 transition-all duration-300 order-2 md:order-1"
+            >
+              <div className="aspect-video overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F111A] shadow-xl relative flex flex-col justify-between">
+                <div className="absolute top-4 left-4 z-20 pointer-events-none">
+                  <div className="w-10 h-10 rounded-xl bg-slate-900/80 backdrop-blur-md flex items-center justify-center border border-white/10">
+                    <Briefcase className="w-5 h-5 text-purple-400" />
+                  </div>
+                </div>
+                <div className="absolute inset-0 bg-slate-800/20 flex items-center justify-center overflow-hidden">
+                   <img src="/1.png" alt="B-School" className="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105" />
+                </div>
+                <div className="relative z-20 m-3 mt-auto rounded-2xl bg-[#0B0D14]/95 backdrop-blur-xl border border-white/5 p-6">
+                  <h3 className="text-xl font-bold text-white mb-2">B-SCHOOL</h3>
+                  <p className="text-sm text-slate-400 mb-6">Build leadership & business excellence</p>
+                  <Button variant="outline" className="rounded-xl px-6 h-10 font-semibold border-purple-500/30 text-purple-300 bg-purple-500/10 hover:bg-purple-500/20">
+                    Explore Program
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Center Card: Finishing School */}
+            <motion.div
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              viewport={{ once: true }}
+              className="relative z-30 w-full md:w-[45%] mx-auto order-1 md:order-2 shadow-[0_0_50px_rgba(99,102,241,0.3)] rounded-[2rem]"
+            >
+              <div className="absolute -inset-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-[2rem] blur-md opacity-50"></div>
+              
+              <div className="aspect-[16/10] overflow-hidden rounded-[2rem] border border-indigo-500/50 bg-[#0F111A] relative flex flex-col justify-between transform md:hover:-translate-y-2 transition-transform duration-500">
+                <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-20 pointer-events-none">
+                  <div className="w-10 h-10 rounded-xl bg-slate-900/80 backdrop-blur-md flex items-center justify-center border border-white/10">
+                    <GraduationCap className="w-5 h-5 text-indigo-400" />
+                  </div>
+                  <div className="flex gap-2">
+                    <Pin className="w-5 h-5 text-slate-400 rotate-45" />
+                    <Badge className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold border-0 py-1 px-3 rounded-lg shadow-[0_0_15px_rgba(6,182,212,0.5)]">
+                      <Sparkles className="w-3.5 h-3.5 mr-1" />
+                      MOST POPULAR
+                    </Badge>
+                  </div>
+                </div>
+                <div className="absolute inset-0 bg-slate-800/40 flex items-center justify-center overflow-hidden">
+                   <img src="/2.png" alt="Finishing School" className="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105" />
+                </div>
+                <div className="relative z-20 m-3 mt-auto rounded-2xl bg-[#0B0D14]/95 backdrop-blur-xl border border-white/5 p-6 shadow-2xl">
+                  <h3 className="text-2xl font-bold text-white mb-2">FINISHING SCHOOL</h3>
+                  <p className="text-sm text-slate-400 mb-6">Transform communication & career readiness</p>
+                  <Button className="rounded-xl px-6 h-10 font-bold bg-cyan-400 text-black hover:bg-cyan-300 transition-colors border-0">
+                    Explore Program
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right Card: Tech School */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+              viewport={{ once: true }}
+              className="z-10 w-full md:w-[40%] md:ml-[-8%] md:scale-90 md:hover:scale-95 opacity-100 md:opacity-70 md:hover:opacity-100 transition-all duration-300 order-3"
+            >
+              <div className="aspect-video overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F111A] shadow-xl relative flex flex-col justify-between">
+                <div className="absolute top-4 right-4 z-20 pointer-events-none">
+                  <div className="w-10 h-10 rounded-xl bg-slate-900/80 backdrop-blur-md flex items-center justify-center border border-white/10">
+                    <Monitor className="w-5 h-5 text-emerald-400" />
+                  </div>
+                </div>
+                <div className="absolute inset-0 bg-slate-800/20 flex items-center justify-center overflow-hidden">
+                   <img src="/3.png" alt="Tech School" className="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105" />
+                </div>
+                <div className="relative z-20 m-3 mt-auto rounded-2xl bg-[#0B0D14]/95 backdrop-blur-xl border border-white/5 p-6">
+                  <h3 className="text-xl font-bold text-white mb-2">TECH SCHOOL</h3>
+                  <p className="text-sm text-slate-400 mb-6">Master future-ready technology skills</p>
+                  <Button variant="outline" className="rounded-xl px-6 h-10 font-semibold border-emerald-500/30 text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20">
+                    Explore Program
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+
+
+        </div>
+      </section>
+
       {/* Success Stories */}
       <section id="testimonials" className="py-32 bg-muted/30">
         <div className="max-w-7xl mx-auto px-6">
-          <SectionHeader 
+          <SectionHeader
             badge="Student Success"
             title="Trusted by thousands of professionals"
             subtitle="See how Kompetenzen Technologies has transformed the careers of our students and the operations of our partner institutions."
@@ -378,7 +489,7 @@ export default function Landing() {
                       "{testimonial.text}"
                     </p>
                     <div className="mt-6 flex gap-1">
-                      {[1,2,3,4,5].map(s => <Sparkles key={s} className="w-4 h-4 text-amber-400 fill-amber-400" />)}
+                      {[1, 2, 3, 4, 5].map(s => <Sparkles key={s} className="w-4 h-4 text-amber-400 fill-amber-400" />)}
                     </div>
                   </CardContent>
                 </Card>
@@ -402,7 +513,7 @@ export default function Landing() {
                 Contact Us
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-8 tracking-tight">
-                Get in touch with <br/><span className="gradient-text">Our Experts</span>
+                Get in touch with <br /><span className="gradient-text">Our Experts</span>
               </h2>
               <p className="text-lg text-muted-foreground mb-12">
                 Have questions about our programs or want a custom demo for your institution? Our team is here to help you 24/7.
@@ -412,15 +523,14 @@ export default function Landing() {
                 {[
                   { icon: Mail, label: 'Email', value: 'hr@kompetenzen.in', color: 'indigo' },
                   { icon: Phone, label: 'Phone', value: '+91 8921168382', color: 'emerald' },
-                  { icon: MapPin, label: 'Location', value: 'Vyttila, Ernakulam, Kerala', color: 'violet' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-4 p-4 rounded-2xl bg-muted/50 border border-border/50">
                     <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center shadow-md", `bg-${item.color}-500/10`)}>
                       <item.icon className={cn("w-5 h-5", `text-${item.color}-400`)} />
                     </div>
-                    <div>
+                    <div className="flex-1 min-w-0">
                       <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{item.label}</p>
-                      <p className="text-sm font-semibold text-foreground">{item.value}</p>
+                      <p className="text-sm font-semibold text-foreground break-words">{item.value}</p>
                     </div>
                   </div>
                 ))}
@@ -437,30 +547,30 @@ export default function Landing() {
               <div className="rounded-3xl overflow-hidden border border-border shadow-2xl h-[500px] bg-muted relative group flex items-center justify-center p-12 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-background to-emerald-500/5" />
                 <div className="absolute inset-0 opacity-10 bg-grid" />
-                
+
                 {/* Abstract Map Art */}
                 <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center space-y-6">
-                   <div className="w-24 h-24 rounded-full bg-indigo-500/10 flex items-center justify-center relative">
-                      <div className="absolute inset-0 rounded-full bg-indigo-500/20 animate-ping" />
-                      <MapPin className="w-10 h-10 text-indigo-400 relative z-10" />
-                   </div>
-                   <div>
-                      <h3 className="text-2xl font-bold text-foreground">Visit Our Campus</h3>
-                      <p className="text-muted-foreground mt-2 max-w-xs mx-auto italic">"Developing Skills, Building Futures"</p>
-                   </div>
-                   <div className="p-6 rounded-2xl bg-card/50 border border-border backdrop-blur-xl shadow-xl max-w-sm">
-                      <p className="text-sm font-bold text-foreground">Sahodaran Ayyappan Road</p>
-                      <p className="text-xs text-muted-foreground mt-1">Vyttila, Ernakulam, Kerala 682019</p>
-                      <a 
-                        href="https://www.google.com/maps/search/?api=1&query=Kompetenzen+Technologies+Vyttila+Ernakulam+Kerala" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                      >
-                        <Button variant="link" className="text-indigo-400 p-0 h-auto mt-4 text-xs font-bold gap-1 uppercase tracking-widest hover:text-indigo-300">
-                           Open in Google Maps <ArrowRight className="w-3 h-3" />
-                        </Button>
-                      </a>
-                   </div>
+                  <div className="w-24 h-24 rounded-full bg-indigo-500/10 flex items-center justify-center relative">
+                    <div className="absolute inset-0 rounded-full bg-indigo-500/20 animate-ping" />
+                    <MapPin className="w-10 h-10 text-indigo-400 relative z-10" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-foreground">Visit Our Campus</h3>
+                    <p className="text-muted-foreground mt-2 max-w-xs mx-auto italic">"Developing Skills, Building Futures"</p>
+                  </div>
+                  <div className="p-6 rounded-2xl bg-card/50 border border-border backdrop-blur-xl shadow-xl max-w-sm">
+                    <p className="text-sm font-bold text-foreground">Sahodaran Ayyappan Road</p>
+                    <p className="text-xs text-muted-foreground mt-1">Vyttila, Ernakulam, Kerala 682019</p>
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Kompetenzen+Technologies+Vyttila+Ernakulam+Kerala"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="link" className="text-indigo-400 p-0 h-auto mt-4 text-xs font-bold gap-1 uppercase tracking-widest hover:text-indigo-300">
+                        Open in Google Maps <ArrowRight className="w-3 h-3" />
+                      </Button>
+                    </a>
+                  </div>
                 </div>
 
                 {/* Decorative background elements */}
@@ -484,10 +594,10 @@ export default function Landing() {
               viewport={{ once: true }}
             >
               <h2 className="text-3xl md:text-6xl font-bold text-white mb-8 tracking-tight">
-                Ready to revolutionize <br/>your institution?
+                Ready to revolutionize <br />your career?
               </h2>
               <p className="text-white/80 text-lg mb-12 max-w-2xl mx-auto">
-                Join 500+ educational institutions that are growing faster with Kompetenzen Technologies IMS.
+                Join thousands of successful professionals who have accelerated their journey with Kompetenzen Technologies.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                 <Link to="/auth/admin-login">
@@ -495,7 +605,7 @@ export default function Landing() {
                     Get Started Now
                   </button>
                 </Link>
-                <button 
+                <button
                   onClick={() => setShowDemo(true)}
                   className="px-12 h-16 rounded-full border-2 border-white/40 bg-white/10 text-white text-lg font-bold backdrop-blur-md hover:bg-white/20 transition-all hover:scale-105 active:scale-95"
                 >
