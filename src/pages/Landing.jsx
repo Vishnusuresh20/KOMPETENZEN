@@ -311,7 +311,7 @@ export default function Landing() {
 
                 <div className="absolute top-3 right-3 md:top-5 md:right-5 z-20">
                   <Badge className="bg-cyan-500 text-white font-black px-2 py-1 md:px-3 md:py-1.5 rounded-md md:rounded-lg text-[6px] md:text-[8px] tracking-widest border-0 shadow-lg">
-                    HOT
+                    NEW
                   </Badge>
                 </div>
               </div>
