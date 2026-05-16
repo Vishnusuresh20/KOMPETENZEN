@@ -23,7 +23,11 @@ import {
   Briefcase,
   Monitor,
   TrendingUp,
-  Pin
+  Pin,
+  Flame,
+  Music,
+  Mic,
+  Activity
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -247,6 +251,10 @@ export default function Landing() {
         </div>
       </section>
 
+
+
+
+
       {/* Stats Section */}
       <section id="stats" className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-6">
@@ -258,6 +266,83 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Three Schools Section (The Pattern) */}
+      <section id="schools" className="py-12 md:py-24 bg-background relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className="relative flex flex-row items-center justify-center gap-0">
+
+            {/* B-SCHOOL */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="z-10 w-[28%] md:w-[22%] mr-[-12%] md:mr-[-8%] md:scale-90 opacity-100 md:opacity-60 transition-all duration-500 hover:opacity-100 group"
+            >
+              <div className="aspect-[4/5] rounded-xl md:rounded-[2rem] overflow-hidden relative border border-white/10 shadow-2xl bg-black">
+                <img src="/1.png" className="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute top-2 left-2 md:top-4 md:left-4 z-20 w-6 h-6 md:w-10 md:h-10 rounded-lg bg-indigo-500/20 backdrop-blur-xl border border-white/10 flex items-center justify-center">
+                  <Briefcase className="w-3 h-3 md:w-5 md:h-5 text-purple-400" />
+                </div>
+                <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3 z-20 p-2 md:p-5 rounded-lg md:rounded-xl bg-black/80 backdrop-blur-2xl border border-white/5 space-y-1 md:space-y-2">
+                  <h3 className="text-[8px] md:text-lg font-black text-white uppercase italic">B-SCHOOL</h3>
+                  <p className="hidden md:block text-slate-400 text-[9px] font-medium leading-relaxed line-clamp-1">Build leadership excellence</p>
+                  <Button variant="ghost" className="h-4 md:h-8 px-0 text-indigo-400 font-bold hover:bg-transparent text-[6px] md:text-[10px]">
+                    Explore <ArrowRight className="ml-1 w-2 h-2 md:w-3 md:h-3" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* FINISHING SCHOOL (The Glowing Center) */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="z-30 w-[44%] md:w-[32%] mx-auto scale-105 md:scale-110 group"
+            >
+              {/* Blue Neon Glow */}
+              <div className="absolute -inset-6 md:-inset-10 bg-indigo-500/30 rounded-[2rem] md:rounded-[3rem] blur-[40px] md:blur-[80px] opacity-60 pointer-events-none group-hover:opacity-100 transition-opacity"></div>
+
+              <div className="aspect-[4/5] rounded-2xl md:rounded-[2.5rem] overflow-hidden relative border border-indigo-500/30 shadow-[0_0_50px_rgba(79,70,229,0.3)] bg-black">
+                <img src="/2.png" className="absolute inset-0 w-full h-full object-cover object-[center_10%] opacity-100 group-hover:scale-105 transition-transform duration-700" />
+
+                <div className="absolute top-3 left-3 md:top-5 md:left-5 z-20 w-8 h-8 md:w-10 md:h-10 rounded-lg bg-indigo-500/20 backdrop-blur-xl border border-white/10 flex items-center justify-center">
+                  <GraduationCap className="w-4 h-4 md:w-5 md:h-5 text-indigo-400" />
+                </div>
+
+                <div className="absolute top-3 right-3 md:top-5 md:right-5 z-20">
+                  <Badge className="bg-cyan-500 text-white font-black px-2 py-1 md:px-3 md:py-1.5 rounded-md md:rounded-lg text-[6px] md:text-[8px] tracking-widest border-0 shadow-lg">
+                    HOT
+                  </Badge>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* TECH SCHOOL */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="z-10 w-[28%] md:w-[22%] ml-[-12%] md:ml-[-8%] md:scale-90 opacity-100 md:opacity-60 transition-all duration-500 hover:opacity-100 group"
+            >
+              <div className="aspect-[4/5] rounded-xl md:rounded-[2rem] overflow-hidden relative border border-white/10 shadow-2xl bg-black">
+                <img src="/3.png" className="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute top-2 right-2 md:top-4 md:right-4 z-20 w-6 h-6 md:w-10 md:h-10 rounded-lg bg-indigo-500/20 backdrop-blur-xl border border-white/10 flex items-center justify-center">
+                  <Monitor className="w-3 h-3 md:w-5 md:h-5 text-emerald-400" />
+                </div>
+                <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3 z-20 p-2 md:p-5 rounded-lg md:rounded-xl bg-black/80 backdrop-blur-2xl border border-white/5 space-y-1 md:space-y-2">
+                  <h3 className="text-[8px] md:text-lg font-black text-white uppercase italic">TECH SCHOOL</h3>
+                  <p className="hidden md:block text-slate-400 text-[9px] font-medium leading-relaxed line-clamp-1">Master technology skills</p>
+                  <Button variant="ghost" className="h-4 md:h-8 px-0 text-emerald-400 font-bold hover:bg-transparent text-[6px] md:text-[10px]">
+                    Explore <ArrowRight className="ml-1 w-2 h-2 md:w-3 md:h-3" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+
 
       {/* Features Section */}
       <section id="features" className="pt-32 pb-16 md:pb-32 relative overflow-hidden">
@@ -334,112 +419,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Three Schools Section (Lovable Style) */}
-      <section id="schools" className="pt-10 pb-20 md:py-20 relative overflow-hidden bg-[#0A0A14]">
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
 
-          {/* Cards Layout */}
-          <div className="relative flex flex-col md:flex-row items-center justify-center mt-2 md:mt-12 mb-16 gap-6 md:gap-0 w-full max-w-6xl mx-auto">
-            
-            {/* Left Card: B-School */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              viewport={{ once: true }}
-              className="z-10 w-full md:w-[40%] md:mr-[-8%] md:scale-90 md:hover:scale-95 opacity-100 md:opacity-70 md:hover:opacity-100 transition-all duration-300 order-2 md:order-1"
-            >
-              <div className="aspect-video overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F111A] shadow-xl relative flex flex-col justify-between">
-                <div className="absolute top-4 left-4 z-20 pointer-events-none">
-                  <div className="w-10 h-10 rounded-xl bg-slate-900/80 backdrop-blur-md flex items-center justify-center border border-white/10">
-                    <Briefcase className="w-5 h-5 text-purple-400" />
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-slate-800/20 flex items-center justify-center overflow-hidden">
-                   <img src="/1.png" alt="B-School" className="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105" />
-                </div>
-                <div className="relative z-20 m-3 mt-auto rounded-2xl bg-[#0B0D14]/95 backdrop-blur-xl border border-white/5 p-6">
-                  <h3 className="text-xl font-bold text-white mb-2">B-SCHOOL</h3>
-                  <p className="text-sm text-slate-400 mb-6">Build leadership & business excellence</p>
-                  <Button variant="outline" className="rounded-xl px-6 h-10 font-semibold border-purple-500/30 text-purple-300 bg-purple-500/10 hover:bg-purple-500/20">
-                    Explore Program
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Center Card: Finishing School */}
-            <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              viewport={{ once: true }}
-              className="relative z-30 w-full md:w-[45%] mx-auto order-1 md:order-2 shadow-[0_0_50px_rgba(99,102,241,0.3)] rounded-[2rem]"
-            >
-              <div className="absolute -inset-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-[2rem] blur-md opacity-50"></div>
-              
-              <div className="aspect-[16/10] overflow-hidden rounded-[2rem] border border-indigo-500/50 bg-[#0F111A] relative flex flex-col justify-between transform md:hover:-translate-y-2 transition-transform duration-500">
-                <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-20 pointer-events-none">
-                  <div className="w-10 h-10 rounded-xl bg-slate-900/80 backdrop-blur-md flex items-center justify-center border border-white/10">
-                    <GraduationCap className="w-5 h-5 text-indigo-400" />
-                  </div>
-                  <div className="flex gap-2">
-                    <Pin className="w-5 h-5 text-slate-400 rotate-45" />
-                    <Badge className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold border-0 py-1 px-3 rounded-lg shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-                      <Sparkles className="w-3.5 h-3.5 mr-1" />
-                      MOST POPULAR
-                    </Badge>
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-slate-800/40 flex items-center justify-center overflow-hidden">
-                   <img src="/2.png" alt="Finishing School" className="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105" />
-                </div>
-                <div className="relative z-20 m-3 mt-auto rounded-2xl bg-[#0B0D14]/95 backdrop-blur-xl border border-white/5 p-6 shadow-2xl">
-                  <h3 className="text-2xl font-bold text-white mb-2">FINISHING SCHOOL</h3>
-                  <p className="text-sm text-slate-400 mb-6">Transform communication & career readiness</p>
-                  <Button className="rounded-xl px-6 h-10 font-bold bg-cyan-400 text-black hover:bg-cyan-300 transition-colors border-0">
-                    Explore Program
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right Card: Tech School */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              viewport={{ once: true }}
-              className="z-10 w-full md:w-[40%] md:ml-[-8%] md:scale-90 md:hover:scale-95 opacity-100 md:opacity-70 md:hover:opacity-100 transition-all duration-300 order-3"
-            >
-              <div className="aspect-video overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F111A] shadow-xl relative flex flex-col justify-between">
-                <div className="absolute top-4 right-4 z-20 pointer-events-none">
-                  <div className="w-10 h-10 rounded-xl bg-slate-900/80 backdrop-blur-md flex items-center justify-center border border-white/10">
-                    <Monitor className="w-5 h-5 text-emerald-400" />
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-slate-800/20 flex items-center justify-center overflow-hidden">
-                   <img src="/3.png" alt="Tech School" className="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105" />
-                </div>
-                <div className="relative z-20 m-3 mt-auto rounded-2xl bg-[#0B0D14]/95 backdrop-blur-xl border border-white/5 p-6">
-                  <h3 className="text-xl font-bold text-white mb-2">TECH SCHOOL</h3>
-                  <p className="text-sm text-slate-400 mb-6">Master future-ready technology skills</p>
-                  <Button variant="outline" className="rounded-xl px-6 h-10 font-semibold border-emerald-500/30 text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20">
-                    Explore Program
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-
-          </div>
-
-
-        </div>
-      </section>
 
       {/* Success Stories */}
       <section id="testimonials" className="py-32 bg-muted/30">
