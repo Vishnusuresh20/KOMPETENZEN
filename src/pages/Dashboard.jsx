@@ -100,24 +100,24 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {statsData.map((stat, i) => (
           <StatCard key={stat.id} stat={stat} index={i} />
         ))}
       </div>
 
       {/* Charts Row 1: Revenue & Branch */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="md:col-span-2">
           <RevenueChart data={revenueChartData} />
         </div>
-        <div>
+        <div className="md:col-span-2 lg:col-span-1">
           <BranchDistributionChart data={branchChartData} />
         </div>
       </div>
 
       {/* Charts Row 2: Location & Course */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <LocationComparisonChart data={locationChartData} />
         </div>

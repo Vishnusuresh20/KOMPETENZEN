@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 import { cn } from '../lib/utils';
@@ -10,7 +9,7 @@ export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background bg-grid">
+    <div className="flex min-h-screen bg-background bg-grid">
       {/* Sidebar Overlay for Mobile */}
       <div 
         className={cn(
@@ -21,7 +20,7 @@ export default function Layout() {
       />
 
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 transition-transform duration-300 md:translate-x-0",
+        "fixed inset-y-0 left-0 z-50 md:relative transition-transform duration-300 md:translate-x-0",
         mobileOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <Sidebar 
@@ -31,22 +30,18 @@ export default function Layout() {
         />
       </div>
 
-      <Topbar 
-        sidebarCollapsed={collapsed} 
-        onToggleSidebar={() => setMobileOpen(!mobileOpen)} 
-      />
+      <div className="flex-1 flex flex-col min-w-0">
+        <Topbar 
+          sidebarCollapsed={collapsed} 
+          onToggleSidebar={() => setMobileOpen(!mobileOpen)} 
+        />
 
-      <motion.main
-        animate={{ 
-          marginLeft: collapsed ? (window.innerWidth < 768 ? 0 : 72) : (window.innerWidth < 768 ? 0 : 260) 
-        }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="min-h-screen pt-[72px]"
-      >
-        <div className="p-4 md:p-6 max-w-[1600px] mx-auto">
-          <Outlet />
-        </div>
-      </motion.main>
+        <main className="flex-1 overflow-y-auto min-h-screen">
+          <div className="p-4 md:p-8 max-w-[1600px] mx-auto w-full">
+            <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

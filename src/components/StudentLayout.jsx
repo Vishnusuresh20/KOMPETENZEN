@@ -35,7 +35,7 @@ export default function StudentLayout() {
           sidebarCollapsed={collapsed}
           onToggleSidebar={() => setMobileOpen(!mobileOpen)} 
         />
-        <main className="flex-1 pt-[72px] overflow-y-auto min-h-screen">
+        <main className="flex-1 overflow-y-auto min-h-screen">
           <div className="p-4 md:p-8 max-w-7xl mx-auto">
             <Outlet />
           </div>
