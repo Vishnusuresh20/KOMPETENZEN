@@ -52,9 +52,9 @@ export default function StudentCourses() {
 
   return (
     <div className="space-y-8 animate-in">
-      <div>
+      <div className="pl-6">
         <h1 className="text-3xl font-bold text-foreground tracking-tight">My Courses</h1>
-        <p className="text-muted-foreground mt-1 flex items-center gap-2">
+        <p className="text-muted-foreground mt-2 flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-emerald-400" />
           Enrolled in: <span className="font-bold text-foreground">{courseName}</span>
         </p>
