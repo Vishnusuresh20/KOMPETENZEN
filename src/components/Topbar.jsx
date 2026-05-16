@@ -62,7 +62,7 @@ export default function Topbar({ sidebarCollapsed, onToggleSidebar }) {
         variant="ghost" 
         size="icon" 
         onClick={onToggleSidebar}
-        className="md:hidden rounded-xl"
+        className="lg:hidden rounded-xl"
       >
         <Menu className="w-5 h-5" />
       </Button>
