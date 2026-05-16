@@ -256,9 +256,9 @@ export default function Landing() {
 
 
       {/* Stats Section */}
-      <section id="stats" className="py-20 bg-muted/30">
+      <section id="stats" className="py-16 md:py-24 bg-muted/30">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-8">
+          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
             <Counter value="70" label="Active Students" suffix="+" />
             <Counter value="10" label="Expert Faculty" />
             <Counter value="8000" label="Placement Success" suffix="+" />
@@ -276,7 +276,7 @@ export default function Landing() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              className="z-10 w-[28%] md:w-[22%] mr-[-12%] md:mr-[-8%] md:scale-90 opacity-100 md:opacity-60 transition-all duration-500 hover:opacity-100 group"
+              className="z-10 w-[28%] md:w-[22%] mr-[-6%] md:mr-[-10%] md:scale-90 opacity-100 md:opacity-60 transition-all duration-500 hover:opacity-100 group"
             >
               <div className="aspect-[4/5] rounded-xl md:rounded-[2rem] overflow-hidden relative border border-white/10 shadow-2xl bg-black">
                 <img src="/1.png" className="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:scale-105 transition-transform duration-700" />
@@ -321,7 +321,7 @@ export default function Landing() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              className="z-10 w-[28%] md:w-[22%] ml-[-12%] md:ml-[-8%] md:scale-90 opacity-100 md:opacity-60 transition-all duration-500 hover:opacity-100 group"
+              className="z-10 w-[28%] md:w-[22%] ml-[-6%] md:ml-[-10%] md:scale-90 opacity-100 md:opacity-60 transition-all duration-500 hover:opacity-100 group"
             >
               <div className="aspect-[4/5] rounded-xl md:rounded-[2rem] overflow-hidden relative border border-white/10 shadow-2xl bg-black">
                 <img src="/3.png" className="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:scale-105 transition-transform duration-700" />
