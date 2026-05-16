@@ -54,7 +54,7 @@ export default function Topbar({ sidebarCollapsed, onToggleSidebar }) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-30 h-[72px] flex items-center px-4 md:px-6 gap-4',
+        'sticky top-0 z-30 h-[72px] flex items-center px-4 md:px-6 lg:px-8 gap-4',
         'bg-card/80 border-b border-border backdrop-blur-xl transition-all duration-300 w-full'
       )}
     >

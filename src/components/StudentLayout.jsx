@@ -36,7 +36,7 @@ export default function StudentLayout() {
           onToggleSidebar={() => setMobileOpen(!mobileOpen)} 
         />
         <main className="flex-1 overflow-y-auto min-h-screen">
-          <div className="p-4 md:p-8 max-w-7xl mx-auto">
+          <div className="px-4 md:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
             <Outlet />
           </div>
         </main>

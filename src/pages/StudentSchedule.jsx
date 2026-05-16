@@ -47,16 +47,16 @@ export default function StudentSchedule() {
 
   return (
     <div className="space-y-8 animate-in">
-      <div>
+      <div className="pl-6 md:pl-7 lg:pl-9">
         <h1 className="text-3xl font-bold text-foreground tracking-tight">Academic Schedule</h1>
-        <p className="text-muted-foreground mt-1 flex items-center gap-2">
+        <p className="text-muted-foreground mt-2 flex items-center gap-2">
           <Clock className="w-4 h-4 text-emerald-400" />
           Standard Session Time: <span className="font-bold text-foreground">{timeSlot}</span>
         </p>
       </div>
 
       <Card className="border-border/50 bg-card/50 backdrop-blur-xl shadow-2xl overflow-hidden border-l-4 border-l-emerald-500">
-        <CardContent className="p-8">
+        <CardContent className="p-5 sm:p-6 lg:p-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
             <div className="space-y-1">
               <h3 className="text-xl font-bold text-foreground">Current Weekly Timetable</h3>
@@ -77,8 +77,8 @@ export default function StudentSchedule() {
                 transition={{ delay: idx * 0.1 }}
                 className="group flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl border border-border bg-muted/20 hover:bg-emerald-500/5 hover:border-emerald-500/30 transition-all cursor-default"
               >
-                <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-                  <div className="md:w-32 shrink-0">
+                <div className="flex flex-col md:flex-row md:items-center gap-4 lg:gap-6">
+                  <div className="md:w-24 lg:w-32 shrink-0">
                     <span className="text-xs md:text-sm font-black text-emerald-400 md:text-foreground tracking-widest uppercase">
                       {day}
                     </span>
@@ -94,8 +94,8 @@ export default function StudentSchedule() {
                   </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 md:text-right">
-                  <div className="flex flex-col md:items-end">
+                <div className="flex flex-col md:flex-row md:items-center gap-4 lg:gap-6 md:text-right">
+                  <div className="flex flex-col md:items-end shrink-0">
                     <span className="text-sm font-bold text-foreground">{timeSlot}</span>
                     <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-0.5">Duration: 2 Hours</span>
                   </div>
