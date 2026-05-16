@@ -328,12 +328,14 @@ export default function Landing() {
                 <div className="absolute top-2 right-2 md:top-4 md:right-4 z-20 w-6 h-6 md:w-10 md:h-10 rounded-lg bg-indigo-500/20 backdrop-blur-xl border border-white/10 flex items-center justify-center">
                   <Monitor className="w-3 h-3 md:w-5 md:h-5 text-emerald-400" />
                 </div>
-                <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3 z-20 p-2 md:p-5 rounded-lg md:rounded-xl bg-black/80 backdrop-blur-2xl border border-white/5 space-y-1 md:space-y-2">
+                <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3 z-20 p-2 md:p-5 rounded-lg md:rounded-xl bg-black/80 backdrop-blur-2xl border border-white/5 space-y-1 md:space-y-2 text-right md:text-left">
                   <h3 className="text-[8px] md:text-lg font-black text-white uppercase italic">TECH SCHOOL</h3>
                   <p className="hidden md:block text-slate-400 text-[9px] font-medium leading-relaxed line-clamp-1">Master technology skills</p>
-                  <Button variant="ghost" className="h-4 md:h-8 px-0 text-emerald-400 font-bold hover:bg-transparent text-[6px] md:text-[10px]">
-                    Explore <ArrowRight className="ml-1 w-2 h-2 md:w-3 md:h-3" />
-                  </Button>
+                  <div className="flex justify-end md:justify-start">
+                    <Button variant="ghost" className="h-4 md:h-8 px-0 text-emerald-400 font-bold hover:bg-transparent text-[6px] md:text-[10px]">
+                      Explore <ArrowRight className="ml-1 w-2 h-2 md:w-3 md:h-3" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </motion.div>
