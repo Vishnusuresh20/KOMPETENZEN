@@ -60,7 +60,7 @@ const Counter = ({ value, label, suffix = "" }) => {
 
   return (
     <div className="text-center">
-      <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">
+      <div className="text-3xl md:text-5xl font-bold gradient-text mb-2">
         {count.toLocaleString()}{suffix}
       </div>
       <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">{label}</p>
@@ -256,9 +256,9 @@ export default function Landing() {
 
 
       {/* Stats Section */}
-      <section id="stats" className="py-16 md:py-24 bg-muted/30">
+      <section id="stats" className="py-12 md:py-24 bg-muted/30">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-8">
             <Counter value="70" label="Active Students" suffix="+" />
             <Counter value="10" label="Expert Faculty" />
             <Counter value="8000" label="Placement Success" suffix="+" />
