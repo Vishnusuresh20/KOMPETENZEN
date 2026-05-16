@@ -20,7 +20,7 @@ export default function StudentLayout() {
       />
 
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 md:relative transition-transform duration-300 md:translate-x-0",
+        "fixed inset-y-0 left-0 z-50 md:sticky md:top-0 md:h-screen transition-transform duration-300 md:translate-x-0",
         mobileOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <StudentSidebar 
