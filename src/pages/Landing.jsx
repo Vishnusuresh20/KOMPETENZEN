@@ -6,28 +6,19 @@ import {
   GraduationCap,
   Sparkles,
   Zap,
-  Shield,
   BarChart3,
   Globe,
   Mail,
   Phone,
   MapPin,
   ArrowRight,
-  ChevronRight,
   Building2,
-  CheckCircle2,
   Sun,
   Moon,
   CreditCard,
   X,
   Briefcase,
-  Monitor,
-  TrendingUp,
-  Pin,
-  Flame,
-  Music,
-  Mic,
-  Activity
+  Monitor
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -250,10 +241,6 @@ export default function Landing() {
 
         </div>
       </section>
-
-
-
-
 
       {/* Stats Section */}
       <section id="stats" className="py-12 md:py-24 bg-muted/30">
